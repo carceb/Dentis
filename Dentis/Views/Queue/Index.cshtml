@@ -1,0 +1,105 @@
+﻿@model List<Dentis.Models.Queue> 
+@{
+	Layout = "";    
+}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Dentis - Pacientes en cola</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="~/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="~/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<!-- Table -->
+								<section>
+									<h2>Pacientes en cola</h2>
+									<div class="table-wrapper">
+										<table>
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Paciente</th>
+													<th>Genero</th>
+													<th>Edad</th>
+													<th>Motivo de Consulta</th>
+													<th>Estatus</th>
+												</tr>
+											</thead>
+											<tbody>
+												@{
+													int counter = 0;
+												}
+												@foreach (var queue in Model)
+												{
+													counter++; 
+													<tr>
+														<td>@counter</td>
+														<td>@queue.PatientName</td>
+														<td>@queue.PatientGender</td>
+														<td>@queue.PatientAge</td>
+														<td>@queue.AppointmentReasonName</td>
+														<td>
+															<select name="ExternalVendors" data-vehicle="@queue.ClinicConsultingId">
+																@foreach (var queueStatus in ViewBag.QueueStatus)
+																{
+																	<option id="vendor-@queueStatus.Value" label="@queueStatus.Text"></option>
+																}
+															</select>							
+														</td>
+													</tr>
+												}
+											</tbody>
+										</table>
+									</div>
+									<br>
+									<ul class="actions">
+										<li><input type="button" value="Actualizar estatus" class="primary"  onclick="location.href='@Url.Action("Index", "Queue")'" /></li>
+									</ul>
+								</section>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="copyright Carlos Ceballos">
+								<li>&copy; Dentis. All rights reserved</li><li></li>
+							</ul>
+						</div>
+					</footer>
+			</div>
+
+		<!-- Scripts -->
+			<script src="~/assets/js/jquery.min.js"></script>
+			<script src="~/assets/js/browser.min.js"></script>
+			<script src="~/assets/js/breakpoints.min.js"></script>
+			<script src="~/assets/js/util.js"></script>
+			<script src="~/assets/js/main.js"></script>
+
+	</body>
+</html>
+

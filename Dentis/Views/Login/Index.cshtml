@@ -1,0 +1,73 @@
+﻿@model SecurityUserModel
+@{
+	Layout = "";    
+}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Dentis</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="~/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+	@using(Html.BeginForm("AccesLogin", "Login", FormMethod.Post))
+	{
+	<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+								</a>
+							@if (ViewBag.InvalidUser == "true")
+							{
+								<h1 style="color: #be3113 ">Usuario o clave inválida</h1>
+							}
+					       <h2 style="color:#4cbece">Sistema de atención odontólogica</h2>
+						</div>
+					</header>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>Indique el usuario y la clave</h2>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											@Html.TextBoxFor(x => x.UserLogin, new { placeholder = "Nombre de usuario"})
+											 <span asp-validation-for="UserLogin" class="text-danger"></span>
+										</div>
+										<div class="field half">
+											@Html.PasswordFor(x => x.UserPassword, new { placeholder = "Clave"})
+											<span asp-validation-for="UserPassword" class="text-danger"></span>
+										</div>
+									</div>
+									<br>
+									<ul class="actions">
+										<li><input type="submit" value="Send" class="primary" /></li>
+									</ul>
+								</form>
+							</section>
+							<ul class="copyright">
+								<li>&copy; Untitled. All rights reserved</li><li>Design: Carlos Ceballos</li>
+							</ul>
+						</div>
+					</footer>
+			</div>	
+	}
+
+		<!-- Scripts -->
+			<script src="~/assets/js/jquery.min.js"></script>
+			<script src="~/assets/js/browser.min.js"></script>
+			<script src="~/assets/js/breakpoints.min.js"></script>
+			<script src="~/assets/js/util.js"></script>
+			<script src="~/assets/js/main.js"></script>
+			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	</body>
+</html>

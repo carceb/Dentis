@@ -24,8 +24,22 @@
 									<span class="title">@ViewBag.ClinicConsultingName</span>
 								</a>
 						</div>
+						<!-- Nav -->
+							<nav>
+								<ul>
+									<li><a href="#menu">Menu</a></li>
+								</ul>
+							</nav>
 					</header>
-				
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li>@Html.ActionLink("Salir", "Index", "Login")</li>
+						</ul>
+					</nav>	
+					
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
@@ -37,13 +51,19 @@
 									<span class="image">
 										<img src="images/pic01.jpg" alt="" />
 									</span>	
-								@Html.ActionLink("Haga clic aquí para registrar al paciente y enviarlo a la cola de espera","Add","PatientRegistration")
+								@Html.ActionLink("Registrar al paciente y enviarlo a la cola de espera","Add","PatientRegistration")
 								</article>
 								<article class="style2">
 									<span class="image">
 										<img src="images/pic02.jpg" alt="" />
 									</span>
-										@Html.ActionLink("Consulte el estado de la cola","Index","Queue")
+										@Html.ActionLink("Consultar el estado de la cola","Index","Queue")
+								</article>
+								<article class="style3">
+									<span class="image">
+										<img src="images/pic03.jpg" alt="" />
+									</span>
+										@Html.ActionLink("Realizar presupuesto","Add","Client")
 								</article>
 @*								<article class="style3">
 									<span class="image">

@@ -20,6 +20,8 @@ builder.Services.AddTransient<IQueue, Queues>();
 builder.Services.AddTransient<IAppointmentReason, AppointmentReasons>();
 builder.Services.AddTransient<IClinic, Clinics>();
 builder.Services.AddTransient<IClinicConsulting, ClinicConsultings>();
+builder.Services.AddTransient<IClient, Clients>();
+builder.Services.AddTransient<IBudget, Budgets>();
 
 
 var app = builder.Build();

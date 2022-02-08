@@ -16,12 +16,12 @@ namespace Dentis.Models
     {
         [Key]
         public int PatientId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El nombre del paciente es requerido")]
         public string? PatientName { get; set; }
         public int PatientAge { get; set; }
-        [Required]
+        [Required(ErrorMessage = "El genero es requerido")]
         public string? PatientGender { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Debe seleccionar un motivo de la consulta")]
         public int AppointmentReasonId { get; set; }
         public int ClinicConsultingId { get; set; }
     }

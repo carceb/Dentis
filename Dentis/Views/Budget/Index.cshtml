@@ -1,4 +1,4 @@
-﻿@model Dentis.Models.PatientViewModel
+﻿@model Dentis.Models.BudgetViweModel
 @{
 	Layout = "";    
 }
@@ -12,7 +12,7 @@
 		<noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
-	@using(Html.BeginForm("Add", "PatientRegistration", FormMethod.Post))
+	@using(Html.BeginForm("Index", "Budget", FormMethod.Post))
 	{
 	<!-- Wrapper -->
 			<div id="wrapper">
@@ -38,10 +38,9 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
+							<li>@Html.ActionLink("Registrar paciente", "Add", "PatientRegistration")</li>
 							<li>@Html.ActionLink("Pacientes en cola", "Index", "Queue")</li>
-							<li>@Html.ActionLink("Realizar presupuesto","Add","Client")</li>
 							<li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
-							<li>@Html.ActionLink("Salir", "Index", "Login")</li>
 						</ul>
 					</nav>
 
@@ -49,21 +48,24 @@
 					<footer id="footer">
 						<div class="inner">
 							<section>
-								<h2>Indique los datos del paciente</h2>
+								<h2>Realizar presupuesto</h2>
 
 									<div class="fields">
 										<div class="field half">
-											@Html.TextBoxFor(x => x.PatientName, new { placeholder = "Nombre del paciente"})
-											 <span asp-validation-for="PatientName" class="text-danger"></span>
+											Cliente: @ViewBag.ClientName
 										</div>
 										<div class="field half">
-											@Html.DropDownListFor(t => t.PatientAge, (SelectList)ViewBag.PatientAges, "-- Seleccione edad --")
+											@Html.DropDownListFor(t => t.QuadrantId, (SelectList)ViewBag.Quadrant, "-- Seleccione el cuadrante --")
 										</div>
 										<div class="field half">
-											@Html.DropDownListFor(t => t.PatientGender, (SelectList)ViewBag.PatientGender, "-- Seleccione genero --")
+											@Html.DropDownListFor(t => t.QuadrantToothId, (SelectList)ViewBag.QuadrantTooth, "-- Seleccione el diente --")
 										</div>
 										<div class="field half">
-											@Html.DropDownListFor(t => t.AppointmentReasonId, (SelectList)ViewBag.AppointmentReason, "-- Seleccione motivo de consulta --")
+											@Html.DropDownListFor(t => t.ProcedureId, (SelectList)ViewBag.ProcedureName, "-- Seleccione el procedimiento --")
+										</div>
+										<div class="field half">
+											@Html.TextBoxFor(x => x.Cost, new { placeholder = "Costo"})
+											 <span asp-validation-for="Cost" class="text-danger"></span>
 										</div>
 									</div>
 									<br>
@@ -87,7 +89,35 @@
 			<script src="~/assets/js/util.js"></script>
 			<script src="~/assets/js/main.js"></script>
 			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
+			<script src="~/assets/js/jquery.min.js" type="text/javascript"></script>  
+			<script type="text/javascript">  
+				$(document).ready(function () {  
+					$("#QuadrantId").change(function () {  
+						$("#QuadrantToothId").empty();  
+						$.ajax({  
+							type: 'POST',  
+							url: '@Url.Action("GetQuadrantTooth")',
+       
+							dataType: 'json',  
+       
+							data: { quadrantToothId: $("#QuadrantId").val() },   
+       
+							success: function (quadrantTooths) {  
+       
+								$.each(quadrantTooths, function (i, quadrantTooth) {  
+								$("#QuadrantToothId").append('<option value="' + quadrantTooth.value + '">' +    
+									 quadrantTooth.text + '</option>');                                                                                                  
+      
+								});  
+							},  
+							error: function (ex) {  
+								alert('No se pudieron obtener los quadrantes.' + ex);  
+							}  
+						});  
+						return false;  
+					})  
+				});  
+			</script>  
 
 
 	</body>

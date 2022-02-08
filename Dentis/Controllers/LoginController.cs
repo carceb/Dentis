@@ -13,6 +13,14 @@ namespace Dentis.Controllers
         }
         public IActionResult Index()
         {
+            HttpContext.Session.Remove("SecurityUserId");
+            HttpContext.Session.Remove("SecurityUserTypeId");
+            HttpContext.Session.Remove("SecurityUserName");
+            HttpContext.Session.Remove("ClinicConsultingId");
+            HttpContext.Session.Remove("ClinicId");
+            HttpContext.Session.Remove("ClinicName");
+            HttpContext.Session.Remove("ClinicConsultingName");
+
             SecurityUserModel model = new SecurityUserModel();
             return View(model);
         }

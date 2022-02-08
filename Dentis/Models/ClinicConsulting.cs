@@ -5,10 +5,11 @@ namespace Dentis.Models
     public class ClinicConsultingViewModel
     {
         [Key]
+        [Required(ErrorMessage = "Debe seleccionar el consultorio")]
         public int ClinicConsultingId { get; set; }
-        [Required]
+      
         public int ClinicId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Debe seleccionar la clinica")]
         public string? ClinicConsultingName { get; set; }
         public string? ClinicConsultingPhone { get; set; }
         public string? ClinicName { get; set; }

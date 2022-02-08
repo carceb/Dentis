@@ -7,13 +7,28 @@ namespace Dentis.Core
         public interface IPatient
         {
             public List<Patient> GetPatients();
-            public bool SavePatient(PatientViewModel model);
+            public bool SavePatient(PatientViewModel model);            
+        }
+
+        public interface IClient
+        {
+            public int SaveClient(ClientViewModel model);
+            public IList<ClientViewModel> GetClientById(int clientId);
+        }
+
+        public interface IBudget
+        {
+            public bool SaveBudget(BudgetViweModel model);
+            public IList<BudgetViweModel> GetQuadrants();
+            public IList<BudgetViweModel> GetQuadrantTooth(int quadrantId);
+            public IList<BudgetViweModel> GetProcedures();
         }
 
         public interface IQueue
         {
             public List<Queue> GetActiveQueue(int clinicConsultingId);
             public IList<QueueStatusViewModel> GetQueueEstatus();
+            public bool UpdateQueueStatus(int statusId, int patientId);
         }
 
         public interface ISecurity

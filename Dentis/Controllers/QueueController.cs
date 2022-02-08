@@ -24,15 +24,13 @@ namespace Dentis.Controllers
             return RedirectToAction("Error", "Home");
         }
 
-        [HttpPost]
-        public IActionResult UpdateStatus(QueueStatusViewModel queueStatusViewModel)
+        public IActionResult UpdateStatus(int patiendId)
         {
             if (ModelState.IsValid)
             {
-
-                if (_patient.SavePatient(patientViewModel))
+                if (_queue.UpdateQueueStatus(2, patiendId))
                 {
-                    return RedirectToAction(nameof(Add));
+                    return RedirectToAction(nameof(Index));
                 }
             }
 

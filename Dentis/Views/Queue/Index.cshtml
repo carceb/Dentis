@@ -1,7 +1,8 @@
 ﻿@model List<Dentis.Models.Queue> 
 @{
-	Layout = "";    
+	Layout = "";   
 }
+
 <!DOCTYPE HTML>
 <html>
 	<head>
@@ -10,8 +11,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="~/assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="~/assets/css/noscript.css" /></noscript>
+
+		<style>
+			.myDiv {
+			  border: 5px outset red;
+			  background-color: lightblue;
+			  text-align: center;
+			}
+		</style>
+
 	</head>
 	<body class="is-preload">
+			<div id="confirmDialog" class="myDiv"  title="Remove Assignment" hidden class="inner">
+					<p>Do you want to save changes </p>
+			</div>
 		<!-- Wrapper -->
 			<div id="wrapper">
 				<!-- Header -->
@@ -28,9 +41,20 @@
 										<li><a href="#menu">Menu</a></li>
 									</ul>
 								</nav>
-
 						</div>
 					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li>@Html.ActionLink("Registrar paciente", "Add", "PatientRegistration")</li>
+							<li>@Html.ActionLink("Realizar presupuesto","Add","Client")</li>
+							<li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
+							<li>@Html.ActionLink("Salir", "Index", "Login")</li>
+						</ul>
+					</nav>
+
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
@@ -61,14 +85,9 @@
 														<td>@queue.PatientName</td>
 														<td>@queue.PatientGender</td>
 														<td>@queue.PatientAge</td>
-														<td>@queue.AppointmentReasonName</td>
-														<td>
-															<select name="ExternalVendors" data-vehicle="@queue.ClinicConsultingId">
-																@foreach (var queueStatus in ViewBag.QueueStatus)
-																{
-																	<option id="vendor-@queueStatus.Value" label="@queueStatus.Text"></option>
-																}
-															</select>							
+														<td>@queue.AppointmentReasonName</td>														
+														<td id="@queue.PatientId">
+															@Html.ActionLink("Atender", "UpdateStatus", "Queue", new {patiendId = queue.PatientId }, new { @id = "btnDelete" })
 														</td>
 													</tr>
 												}
@@ -77,7 +96,7 @@
 									</div>
 									<br>
 									<ul class="actions">
-										<li><input type="button" value="Actualizar estatus" class="primary"  onclick="location.href='@Url.Action("Index", "Queue")'" /></li>
+										<li><input type="button" value="Registrar paciente" class="primary"  onclick="location.href='@Url.Action("Add", "PatientRegistration")'" /></li>
 									</ul>
 								</section>
 						</div>
@@ -99,7 +118,43 @@
 			<script src="~/assets/js/breakpoints.min.js"></script>
 			<script src="~/assets/js/util.js"></script>
 			<script src="~/assets/js/main.js"></script>
+			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-	</body>
+			PARA DIALOGO: FUNCIONA PERO NO SE VE VIEN EN LOS ESTILOS
+
+@*			<script src="~/assets/js/browser.min.js"></script>
+			<script src="~/assets/js/breakpoints.min.js"></script>
+			<script src="~/assets/js/util.js"></script>
+			<script src="~/assets/js/main.js"></script>
+			<script src="~/lib/jquery/dist/jquery.js"></script>
+			<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+			<script>
+				$(function () {
+					var patiendId = 0;
+ 
+					$('a[id*=btnDelete]').click(function (e) {
+						debugger;
+						e.preventDefault();
+						patiendId = $(this).parent()[0].id;
+						$('#confirmDialog').data('id', patiendId).dialog('open');
+					});
+ 
+					$("#confirmDialog").dialog({
+						autoOpen: false,
+						modal: true,
+						resizable: false,
+						buttons: {
+							"Ok": function () {
+								window.location.href ="Queue/UpdateStatus?patiendId=" + patiendId;
+							},
+							"Cancel": function (e) {
+								$(this).dialog("close");
+							}
+						},
+					});
+				});
+			</script>
+*@	</body>
 </html>
 

@@ -7,7 +7,8 @@ namespace Dentis.Models
         [Key]
         public int ClientId { get; set; }
         [Required(ErrorMessage = "La cédula es requrida")]
-        public double IdentificationNumber { get; set; }
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "La cédula debe ser un número")]
+        public double? IdentificationNumber { get; set; }
         [Required(ErrorMessage = "El nombre del cliente es requerido")]
         public string? ClientName { get; set; }
         [Required(ErrorMessage = "El genero es requerido")]

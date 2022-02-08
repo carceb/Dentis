@@ -53,7 +53,7 @@
 
 									<div class="fields">
 										<div class="field half">
-											@Html.TextBoxFor(x => x.IdentificationNumber, new { placeholder = "Cédula"})
+											@Html.TextBoxFor(x => x.IdentificationNumber, new { placeholder = "Cédula", tabindex = "0", maxlength = "12"})
 											 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
 										</div>
 										<div class="field half">

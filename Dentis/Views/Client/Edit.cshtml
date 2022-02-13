@@ -1,6 +1,6 @@
 ﻿@model Dentis.Models.ClientViewModel
 @{
-	Layout = "";    
+	Layout = "";
 }
 <!DOCTYPE HTML>
 <html>
@@ -12,7 +12,7 @@
 		<noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
-	@using(Html.BeginForm("Add", "Client", FormMethod.Post))
+	@using(Html.BeginForm("Edit", "Client", FormMethod.Post))
 	{
 	<!-- Wrapper -->
 			<div id="wrapper">
@@ -54,18 +54,18 @@
 
 									<div class="fields">
 										<div class="field half">
-											@Html.TextBoxFor(x => x.IdentificationNumber, new { placeholder = "Cédula", tabindex = "0", maxlength = "12" })
-											 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
+											@Html.HiddenFor(x=> x.ClientId)
+											@Html.TextBoxFor(x => x.IdentificationNumber, new { @readonly = true})	
 										</div>
 										<div class="field half">
 											@Html.TextBoxFor(x => x.ClientName, new { placeholder = "Nombre"})
 											 <span asp-validation-for="ClientName" class="text-danger"></span>
 										</div>
 										<div class="field half">
-											@Html.DropDownListFor(t => t.Gender, (SelectList)ViewBag.PatientGender, "-- Seleccione genero --")
+											@Html.DropDownListFor(t => t.Gender, (SelectList)ViewBag.Gender)
 										</div>
 										<div class="field half">
-											@Html.TextBoxFor(m => m.BirthDate, new { @class = "getdate", placeholder = "Fecha de nacimiento", @readonly = true })
+											@Html.TextBoxFor(m => m.BirthDate, new { @class = "getdate", @readonly = true })
 											 <span asp-validation-for="BirthDate" class="text-danger"></span>
 										</div>
 										<div class="field half">

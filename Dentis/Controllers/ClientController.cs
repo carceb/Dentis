@@ -13,12 +13,88 @@ namespace Dentis.Controllers
         {
             this._client = client;
         }
-        public IActionResult Add()
-        {
-            ClientViewModel patientViewModel = new ClientViewModel();
 
-            ViewBag.Gender = new SelectList(GetGenders());
-            return View(patientViewModel);
+        public IActionResult SelectClient()
+        {
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                ClientViewModel clientViewModel = new ClientViewModel();
+                return View(clientViewModel);
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SelectClient(ClientViewModel clientViewModel)
+        {
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                var model = _client.GetClientByIdentificationNumber(clientViewModel.IdentificationNumber).FirstOrDefault();
+
+                if (model != null)
+                {
+                    return RedirectToAction("Index", "Budget", new { clientId = model.ClientId });
+                }
+                else
+                {
+                   return RedirectToAction("Add", new { idNumber = clientViewModel.IdentificationNumber});
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        public IActionResult Edit(int clientId)
+        {
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                ClientViewModel list = new ClientViewModel();
+                var model = _client.GetClientById(clientId).FirstOrDefault();
+
+                ViewBag.Gender = new SelectList(GetGenders());
+
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ClientViewModel model)
+        {
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                _client.SaveClient(model);
+                return RedirectToAction("SelectClient");
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        public IActionResult Add(double? idNumber)
+        {
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                ClientViewModel clientViewModel = new ClientViewModel();
+                clientViewModel.IdentificationNumber = idNumber;
+
+                ViewBag.Gender = new SelectList(GetGenders());
+                return View(clientViewModel);
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]

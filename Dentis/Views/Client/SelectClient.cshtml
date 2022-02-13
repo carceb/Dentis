@@ -1,4 +1,4 @@
-﻿@model Dentis.Models.PatientViewModel
+﻿@model Dentis.Models.ClientViewModel
 @{
 	Layout = "";    
 }
@@ -12,7 +12,7 @@
 		<noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
-	@using(Html.BeginForm("Add", "PatientRegistration", FormMethod.Post))
+	@using(Html.BeginForm("SelectClient", "Client", FormMethod.Post))
 	{
 	<!-- Wrapper -->
 			<div id="wrapper">
@@ -38,8 +38,8 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
+							<li>@Html.ActionLink("Registrar paciente", "Add", "PatientRegistration")</li>
 							<li>@Html.ActionLink("Pacientes en cola", "Index", "Queue")</li>
-							<li>@Html.ActionLink("Realizar presupuesto","SelectClient","Client")</li>
 							<li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
 							<li>@Html.ActionLink("Salir", "Index", "Login")</li>
 						</ul>
@@ -49,27 +49,17 @@
 					<footer id="footer">
 						<div class="inner">
 							<section>
-								<h2>Indique los datos del paciente</h2>
+								<h2>Indique los datos del cliente</h2>
 
 									<div class="fields">
 										<div class="field half">
-											@Html.TextBoxFor(x => x.PatientName, new { placeholder = "Nombre del paciente"})
-											 <span asp-validation-for="PatientName" class="text-danger"></span>
-										</div>
-										<div class="field half">
-											@Html.DropDownListFor(t => t.PatientAge, (SelectList)ViewBag.PatientAges, "-- Seleccione edad --")
-										</div>
-										<div class="field half">
-											@Html.DropDownListFor(t => t.PatientGender, (SelectList)ViewBag.PatientGender, "-- Seleccione genero --")
-										</div>
-										<div class="field half">
-											@Html.DropDownListFor(t => t.AppointmentReasonId, (SelectList)ViewBag.AppointmentReason, "-- Seleccione motivo de consulta --")
+											@Html.TextBoxFor(x => x.IdentificationNumber, new { placeholder = "Cédula", tabindex = "0", maxlength = "12"})
+											 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
 										</div>
 									</div>
 									<br>
 									<ul class="actions">
-										<li><input type="submit" value="Enviar a la cola" class="primary" /></li>
-										<li><input type="button" value="Pacientes en cola" class="primary"  onclick="location.href='@Url.Action("Index", "Queue")'" /></li>
+										<li><input type="submit" value="Buscar" class="primary" /></li>
 									</ul>
 								</section>
 						</div>
@@ -84,9 +74,7 @@
 			<script src="~/assets/js/util.js"></script>
 			<script src="~/assets/js/main.js"></script>
 			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-
-
 	</body>
 </html>
+
 

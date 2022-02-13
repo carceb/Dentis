@@ -14,11 +14,13 @@ namespace Dentis.Core
         {
             public int SaveClient(ClientViewModel model);
             public IList<ClientViewModel> GetClientById(int clientId);
+            public IList<ClientViewModel> GetClientByIdentificationNumber(double? idNumber);
         }
 
         public interface IBudget
         {
-            public bool SaveBudget(BudgetViweModel model);
+            public int SaveBudget(BudgetViweModel model);
+            public IList<BudgetViweModel> GetBudgetDetailByBudgetIdAndClinicConsultingId(int budgetId, int clinicConsultingId);
             public IList<BudgetViweModel> GetQuadrants();
             public IList<BudgetViweModel> GetQuadrantTooth(int quadrantId);
             public IList<BudgetViweModel> GetProcedures();

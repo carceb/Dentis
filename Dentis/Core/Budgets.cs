@@ -11,7 +11,7 @@ namespace Dentis.Core
         {
             this._configuration = configuration;
         }
-        public bool SaveBudget(BudgetViweModel model)
+        public int SaveBudget(BudgetViweModel model)
         {
             try
             {
@@ -26,15 +26,55 @@ namespace Dentis.Core
                     cmd.Parameters.AddWithValue("QuadrantToothId", model.QuadrantToothId);
                     cmd.Parameters.AddWithValue("ProcedureId", model.ProcedureId);
                     cmd.Parameters.AddWithValue("Cost", model.Cost);
-                    cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue("ClinicConsultingID", model.ClinicConsultingId);
 
-                    return true;
+                    return Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
             catch (Exception)
             {
-                return false;
+                return 0;
             }
+        }
+
+        public IList<BudgetViweModel> GetBudgetDetailByBudgetIdAndClinicConsultingId(int budgetId, int clinicConsultingId)
+        {
+            List<BudgetViweModel> budgets = new List<BudgetViweModel>();
+
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
+                {
+                    sqlConnection.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM BudgetView WHERE BudgetId = " + budgetId + " AND ClinicConsultingId = " + clinicConsultingId, sqlConnection);
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        budgets.Add(new BudgetViweModel
+                        {
+                            BudgetId = (int)dr["BudgetId"],
+                            BudgetDetailId = (int)dr["BudgetDetailId"],
+                            ClientId = (int)dr["ClientId"],
+                            ClinicConsultingId = clinicConsultingId,
+                            ClientName = (string)dr["ClientName"],
+                            QuadrantName = (string)dr["QuadrantName"],
+                            QuadrantId = (int)dr["QuadrantId"],
+                            ToothNumber = (int)dr["ToothNumber"],
+                            ProcedureName = (string)dr["ProcedureName"],
+                            Cost = (double)dr["Cost"],
+                            Observation = (string)dr["Observation"],
+                            ProcedureId = (int)dr["ProcedureId"],
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return budgets.ToList();
         }
 
         public IList<BudgetViweModel> GetQuadrants()

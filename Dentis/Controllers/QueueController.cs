@@ -9,7 +9,7 @@ namespace Dentis.Controllers
     {
         private readonly IQueue _queue;
 
-        public QueueController(IQueue  queue)
+        public QueueController(IQueue queue)
         {
             this._queue = queue;
         }

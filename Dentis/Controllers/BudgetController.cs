@@ -14,18 +14,59 @@ namespace Dentis.Controllers
             this._budget = budget;
             this._client = client; 
 		}
-        public IActionResult Index(int clientId)
+        public IActionResult Index(int clientId, int budgetId)
         {
-            BudgetViweModel budgetViweModel = new BudgetViweModel();
-            budgetViweModel.ClientId = clientId;
-            var clientName = _client.GetClientById(clientId);
-            ViewBag.ClientName = clientName.Select(x => x.ClientName).FirstOrDefault();
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                BudgetViweModel budgetViweModel = new BudgetViweModel();
 
-            ViewBag.Quadrant = new SelectList(this._budget.GetQuadrants(), "QuadrantId", "QuadrantName");
-            ViewBag.QuadrantTooth = new SelectList(this._budget.GetQuadrantTooth(1), "QuadrantToothId", "ToothNumber");
-            ViewBag.ProcedureName = new SelectList(this._budget.GetProcedures(), "ProcedureId", "ProcedureName");
+                ViewBag.ClientId = clientId;
+                ViewBag.ClientName = _client.GetClientById(clientId).Select(x => x.ClientName).FirstOrDefault();
 
-            return View(budgetViweModel);
+                ViewBag.Quadrant = new SelectList(this._budget.GetQuadrants(), "QuadrantId", "QuadrantName");
+                ViewBag.QuadrantTooth = new SelectList(this._budget.GetQuadrantTooth(1), "QuadrantToothId", "ToothNumber");
+                ViewBag.ProcedureName = new SelectList(this._budget.GetProcedures(), "ProcedureId", "ProcedureName");
+
+                return View(budgetViweModel);
+            }
+            else 
+            {
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Add(BudgetViweModel model)
+        {
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    int budgetId = _budget.SaveBudget(model);
+                    if (budgetId > 0)
+                    {
+                        return RedirectToAction("Index", "Budget", new { clientId = model.ClientId, budgetId = budgetId });
+                    }
+                }
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        public JsonResult InsertBudget(List<Customer> customers)
+        {
+            int budgetId = 0;
+            if (customers == null)
+            {
+                customers = new List<Customer>();
+            }
+
+            //Loop and insert records.
+            //foreach (BudgetViweModel customer in customers)
+            //{
+            //    budgetId = _budget.SaveBudget(customer);
+            //}
+            return Json(budgetId);
         }
 
         public JsonResult GetQuadrantTooth(int quadrantToothId)

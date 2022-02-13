@@ -14,7 +14,7 @@ namespace Dentis.Models
         [Required(ErrorMessage = "El genero es requerido")]
         public string? Gender { get; set; }
         [Required(ErrorMessage = "La fecha de nacimiento es requerida")]
-        public DateTime BirthDate { get; set; }
+        public string? BirthDate { get; set; }
         public string? ClientAddress { get; set; }
         public string? ClientCellPhone { get; set; }
         public string? ClientEmail { get; set; }

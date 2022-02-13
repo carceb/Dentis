@@ -16,10 +16,17 @@ namespace Dentis.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.UserName = UserName();
-            ViewBag.ClinicName = (string)HttpContext.Session.GetString("ClinicName");
-            ViewBag.ClinicConsultingName = (string)HttpContext.Session.GetString("ClinicConsultingName");
-            return View(_patient.GetPatients());
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                ViewBag.UserName = UserName();
+                ViewBag.ClinicName = (string)HttpContext.Session.GetString("ClinicName");
+                ViewBag.ClinicConsultingName = (string)HttpContext.Session.GetString("ClinicConsultingName");
+                return View(_patient.GetPatients());
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         public IActionResult Privacy()

@@ -17,38 +17,56 @@ namespace Dentis.Controllers
         }
         public IActionResult Index()
         {
-            int userId = 0;
-
-            ClinicConsultingViewModel model = new ClinicConsultingViewModel();
-
-            if (HttpContext.Session.GetInt32("SecurityUserId") != null)
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
-                userId = (int)HttpContext.Session.GetInt32("SecurityUserId");
-            }
+                int userId = 0;
 
-            if (!IsSuperUser())
-            {
-                ViewBag.Clinic = new SelectList(this._clinic.GetClinicByUserId(userId), "ClinicId", "ClinicName");
-                ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingUserByUserId(userId), "ClinicConsultingId", "ClinicConsultingName");
+                ClinicConsultingViewModel model = new ClinicConsultingViewModel();
+
+                if (HttpContext.Session.GetInt32("SecurityUserId") != null)
+                {
+                    userId = (int)HttpContext.Session.GetInt32("SecurityUserId");
+                }
+
+                if (!IsSuperUser())
+                {
+                    ViewBag.Clinic = new SelectList(this._clinic.GetClinicByUserId(userId), "ClinicId", "ClinicName");
+                    ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingUserByUserId(userId), "ClinicConsultingId", "ClinicConsultingName");
+                }
+                else
+                {
+                    var firstClinc = this._clinic.GetClinics().FirstOrDefault();
+                    if (firstClinc != null)
+                    {
+                        ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
+                        ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingsByClinicId(firstClinc.ClinicId), "ClinicConsultingId", "ClinicConsultingName");
+                    }
+                }
+
+                return View();
             }
             else 
             {
-                ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
-                ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultings(), "ClinicConsultingId", "ClinicConsultingName");
+                return RedirectToAction("Error", "Home");
             }
-
-            return View();
         }
 
         [HttpPost]
         public IActionResult Index(ClinicConsultingViewModel model)
         {
-            HttpContext.Session.SetInt32("ClinicConsultingId", model.ClinicConsultingId);
-            HttpContext.Session.SetInt32("ClinicId", model.ClinicId);
-            HttpContext.Session.SetString("ClinicName", _clinic.GetClinicById(model.ClinicId).FirstOrDefault().ClinicName);
-            HttpContext.Session.SetString("ClinicConsultingName", _clinicConsulting.GetClinicConsultingByClinicConsultingId(model.ClinicConsultingId).FirstOrDefault().ClinicConsultingName);
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                HttpContext.Session.SetInt32("ClinicConsultingId", model.ClinicConsultingId);
+                HttpContext.Session.SetInt32("ClinicId", model.ClinicId);
+                HttpContext.Session.SetString("ClinicName", _clinic.GetClinicById(model.ClinicId).FirstOrDefault().ClinicName);
+                HttpContext.Session.SetString("ClinicConsultingName", _clinicConsulting.GetClinicConsultingByClinicConsultingId(model.ClinicConsultingId).FirstOrDefault().ClinicConsultingName);
 
-            return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
         private bool IsSuperUser()
         {

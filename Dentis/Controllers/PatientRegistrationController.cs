@@ -18,32 +18,46 @@ namespace Dentis.Controllers
 
         public IActionResult Add()
         {
-            PatientViewModel patientViewModel = new PatientViewModel();
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            {
+                PatientViewModel patientViewModel = new PatientViewModel();
 
-            ViewBag.PatientGender = new SelectList(GetGenders());
-            ViewBag.PatientAges = new SelectList(GetAges());
-            ViewBag.AppointmentReason = new SelectList(this._appointmentReason.GetAppointmentReasons(), "AppointmentReasonId", "AppointmentReasonName");
+                ViewBag.PatientGender = new SelectList(GetGenders());
+                ViewBag.PatientAges = new SelectList(GetAges());
+                ViewBag.AppointmentReason = new SelectList(this._appointmentReason.GetAppointmentReasons(), "AppointmentReasonId", "AppointmentReasonName");
 
-            return View(patientViewModel);
+                return View(patientViewModel);
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [HttpPost]
         public IActionResult Add(PatientViewModel patientViewModel)
         {
-            if (ModelState.IsValid)
+            if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
-                if (HttpContext.Session.GetInt32("ClinicConsultingId") != null)
+                if (ModelState.IsValid)
                 {
-                    patientViewModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
-                }
-                
-                if (_patient.SavePatient(patientViewModel))
-                {
-                    return RedirectToAction(nameof(Add));
-                }
-            }
+                    if (HttpContext.Session.GetInt32("ClinicConsultingId") != null)
+                    {
+                        patientViewModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
+                    }
 
-            return RedirectToAction("Error", "Home");
+                    if (_patient.SavePatient(patientViewModel))
+                    {
+                        return RedirectToAction(nameof(Add));
+                    }
+                }
+
+                return RedirectToAction("Error", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         private List<string> GetGenders()

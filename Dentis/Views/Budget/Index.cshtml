@@ -1,6 +1,8 @@
 ﻿@model Dentis.Models.BudgetViweModel
 @{
-	Layout = "";    
+	Layout = "";
+	List<BudgetViweModel> modelList = new List<BudgetViweModel>();
+	ViewBag.Lista = modelList;
 }
 <!DOCTYPE HTML>
 <html>
@@ -12,11 +14,10 @@
 		<noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
-	@using(Html.BeginForm("Index", "Budget", FormMethod.Post))
+	@using(Html.BeginForm("Add", "Budget", FormMethod.Post))
 	{
 	<!-- Wrapper -->
 			<div id="wrapper">
-
 				<!-- Header -->
 					<header id="header">
 						<div class="inner">
@@ -38,6 +39,7 @@
 					<nav id="menu">
 						<h2>Menu</h2>
 						<ul>
+							<li>@Html.ActionLink("Seleccionar cliente","SelectClient","Client")</li>
 							<li>@Html.ActionLink("Registrar paciente", "Add", "PatientRegistration")</li>
 							<li>@Html.ActionLink("Pacientes en cola", "Index", "Queue")</li>
 							<li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
@@ -49,12 +51,13 @@
 						<div class="inner">
 							<section>
 								<h2>Realizar presupuesto</h2>
-
 									<div class="fields">
 										<div class="field half">
-											Cliente: @ViewBag.ClientName
-										</div>
+											@Html.ActionLink((string)ViewBag.ClientName,"Edit", "Client", new { clientId = ViewBag.ClientId}, null)   
+	    								</div>
 										<div class="field half">
+@*											@Html.HiddenFor(t => t.ClientId)
+											@Html.HiddenFor(t => t.BudgetId)*@
 											@Html.DropDownListFor(t => t.QuadrantId, (SelectList)ViewBag.Quadrant, "-- Seleccione el cuadrante --")
 										</div>
 										<div class="field half">
@@ -64,19 +67,53 @@
 											@Html.DropDownListFor(t => t.ProcedureId, (SelectList)ViewBag.ProcedureName, "-- Seleccione el procedimiento --")
 										</div>
 										<div class="field half">
+											@Html.TextAreaFor(x => x.Observation, new { placeholder = "Observaciones"})
+										</div>
+										<div class="field half">
 											@Html.TextBoxFor(x => x.Cost, new { placeholder = "Costo"})
 											 <span asp-validation-for="Cost" class="text-danger"></span>
 										</div>
 									</div>
 									<br>
 									<ul class="actions">
-										<li><input type="submit" value="Enviar a la cola" class="primary" /></li>
-										<li><input type="button" value="Pacientes en cola" class="primary"  onclick="location.href='@Url.Action("Index", "Queue")'" /></li>
+										<li><input type="button" id="btnAdd" value="Agregar a la lista"/></li>
+										<li><input type="button" id="btnSave" value="Save All" /></li>
+										<li><input type="submit" value="Guardar presupuesto" class="primary" /></li>
+										@*<li><input type="button" value="Seleccionar cliente" class="primary"  onclick="location.href='@Url.Action("SelectClient", "Client")'" /></li>*@
 									</ul>
+
+									<div class="table-wrapper">
+										<table id="tblCustomers" >
+											<thead>
+												<tr>
+													<th>Cuadrante</th>
+													<th>Diente</th>
+													<th>Procedimiento</th>
+													<th>Observación</th>
+													<th>Costo</th>
+													 <th></th>
+												</tr>
+											</thead>
+											<tbody>
+												@{
+													int counter = 0;
+												}
+												@foreach (var queue in modelList)
+												{
+													counter++; 
+													<tr>
+														<td>@queue.QuadrantName</td>														
+														<td>@queue.ToothNumber</td>														
+														<td>@queue.ProcedureName</td>														
+														<td>@queue.Observation</td>												
+														<td>@queue.Cost</td>												
+														<td><input type="button" value="Remove" onclick="Remove(this)"/></td>
+													</tr>
+												}
+											</tbody>
+										</table>
+									</div>
 								</section>
-							<ul class="copyright">
-								<li>&copy; Untitled. All rights reserved</li><li>Design: Carlos Ceballos</li>
-							</ul>
 						</div>
 					</footer>
 			</div>	
@@ -90,7 +127,20 @@
 			<script src="~/assets/js/main.js"></script>
 			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 			<script src="~/assets/js/jquery.min.js" type="text/javascript"></script>  
-			<script type="text/javascript">  
+			<script type="text/javascript">
+			//Global Functions
+				function Remove(button) {
+					//Determine the reference of the Row using the Button.
+					var row = $(button).closest("TR");
+					var name = $("TD", row).eq(0).html();
+					if (confirm("¿Desea eliminar el renglón: " + name +"?")) {
+						//Get the reference of the Table.
+						var table = $("#tblCustomers")[0];
+ 
+						//Delete the Table row using it's Index.
+						table.deleteRow(row[0].rowIndex);
+					}
+				};
 				$(document).ready(function () {  
 					$("#QuadrantId").change(function () {  
 						$("#QuadrantToothId").empty();  
@@ -115,11 +165,78 @@
 							}  
 						});  
 						return false;  
-					})  
+					}) 
+					
+					//Dynamic Table
+					 $("body").on("click", "#btnAdd", function () {
+						var txtQuadrant = $("#QuadrantId option:selected");
+						var txtTooth = $("#QuadrantToothId option:selected");
+						var txtProcedure = $("#ProcedureId option:selected");					
+						var txtObservation = $("#Observation");
+						var txtCost = $("#Cost");
+ 
+						//Get the reference of the Table's TBODY element.
+						var tBody = $("#tblCustomers > TBODY")[0];
+ 
+						//Add Row.
+						var row = tBody.insertRow(-1);
+
+						//Add Quadrant cell.
+						cell = $(row.insertCell(-1));
+						cell.html(txtQuadrant.text());
+
+						//Add Tooth cell.
+						cell = $(row.insertCell(-1));
+						cell.html(txtTooth.text());
+ 
+						//Add Procedure cell.
+						cell = $(row.insertCell(-1));
+						cell.html(txtProcedure.text());
+ 
+						//Add Observation cell.
+						var cell = $(row.insertCell(-1));
+						cell.html(txtObservation.val());
+
+						//Add Cost cell.
+						var cell = $(row.insertCell(-1));
+						cell.html(txtCost.val());
+ 
+						//Add Button cell.
+						cell = $(row.insertCell(-1));
+						var btnRemove = $("<input />");
+						btnRemove.attr("type", "button");
+						btnRemove.attr("onclick", "Remove(this);");
+						btnRemove.val("Remove");
+						cell.append(btnRemove);
+					});
+
+
+					$("body").on("click", "#btnSave", function () {
+						//Loop through the Table rows and build a JSON array.
+						var customers = new Array();
+						$("#tblCustomers TBODY TR").each(function () {
+							var row = $(this);
+							var customer = {};
+							customer.Name = row.find("TD").eq(0).html();
+							customer.Country = row.find("TD").eq(1).html();
+							customers.push(customer);
+						});
+
+						//Send the JSON array to Controller using AJAX.
+						$.ajax({
+							type: "POST",
+							url: "/Budget/InsertBudget",
+							data: JSON.stringify(customers),
+							contentType: "application/json; charset=utf-8",
+							dataType: "json",
+							success: function (r) {
+								alert(r + " record(s) inserted.");
+							}
+						});
+					});
+
 				});  
-			</script>  
-
-
+			</script>   
 	</body>
 </html>
 

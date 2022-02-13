@@ -49,7 +49,6 @@ namespace Dentis.Controllers
 
                 throw;
             }
-
         }
     }
 }

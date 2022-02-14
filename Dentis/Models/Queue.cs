@@ -7,6 +7,7 @@
         public DateTime EndDate { get; set; }
         public int QueueStatusId { get; set; }
         public int ClinicConsultingId { get; set; }
+        public string? ClinicConsultingName { get; set; }
         public string? QueueStatusName { get; set; }
         public int PatientId { get; set; }
         public string? PatientName { get; set; }

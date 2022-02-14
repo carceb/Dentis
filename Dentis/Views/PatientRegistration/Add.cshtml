@@ -49,20 +49,24 @@
 					<footer id="footer">
 						<div class="inner">
 							<section>
-								<h2>Indique los datos del paciente</h2>
+								<h2>Datos del paciente</h2>
 
 									<div class="fields">
 										<div class="field half">
+											<strong>Nombre:</strong>
 											@Html.TextBoxFor(x => x.PatientName, new { placeholder = "Nombre del paciente"})
 											 <span asp-validation-for="PatientName" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Edad:</strong>
 											@Html.DropDownListFor(t => t.PatientAge, (SelectList)ViewBag.PatientAges, "-- Seleccione edad --")
 										</div>
 										<div class="field half">
+											<strong>Genero:</strong>
 											@Html.DropDownListFor(t => t.PatientGender, (SelectList)ViewBag.PatientGender, "-- Seleccione genero --")
 										</div>
 										<div class="field half">
+											<strong>Motivo consulta:</strong>
 											@Html.DropDownListFor(t => t.AppointmentReasonId, (SelectList)ViewBag.AppointmentReason, "-- Seleccione motivo de consulta --")
 										</div>
 									</div>

@@ -35,9 +35,11 @@
 								<form method="post" action="#">
 									<div class="fields">
 										<div class="field half">
+											<strong>Clínica:</strong>
 											@Html.DropDownListFor(t => t.ClinicId, (SelectList)@ViewBag.Clinic)
 										</div>
 										<div class="field half">
+											<strong>Consultorio:</strong>
 											@Html.TextBoxFor(m => m.ClinicConsultingName, new { style = "display: none;" })
 											@Html.DropDownListFor(t => t.ClinicConsultingId , (SelectList)ViewBag.ClinicConsulting, "-- Seleccione el consultorio --")
 											<span asp-validation-for="ClinicConsultingId" class="text-danger"></span>

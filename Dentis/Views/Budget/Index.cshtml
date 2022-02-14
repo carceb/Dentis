@@ -53,26 +53,37 @@
 								<h2>Realizar presupuesto</h2>
 									<div class="fields">
 										<div class="field half">
-											@Html.ActionLink((string)ViewBag.ClientName,"Edit", "Client", new { clientId = ViewBag.ClientId}, null)   
+											<strong>Ciente:</strong>
+											 @Html.ActionLink((string)ViewBag.ClientName,"Edit", "Client", new { clientId = ViewBag.ClientId}, null)
+											<br />
+											<br />
 	    								</div>
 										<div class="field half">
+											<strong>Cuadrante:</strong>
 											@Html.HiddenFor(t => t.ClientId)
 											@Html.HiddenFor(t => t.BudgetId)
 											@Html.HiddenFor(t => t.ClinicConsultingId)
 											@Html.DropDownListFor(t => t.QuadrantId, (SelectList)ViewBag.Quadrant, "-- Seleccione el cuadrante --")
 										</div>
 										<div class="field half">
+											<strong>Diente:</strong>
 											@Html.DropDownListFor(t => t.QuadrantToothId, (SelectList)ViewBag.QuadrantTooth, "-- Seleccione el diente --")
 										</div>
 										<div class="field half">
+											<strong>Procedimiento:</strong>
 											@Html.DropDownListFor(t => t.ProcedureId, (SelectList)ViewBag.ProcedureName, "-- Seleccione el procedimiento --")
 										</div>
 										<div class="field half">
 											@Html.TextAreaFor(x => x.Observation, new { placeholder = "Observaciones"})
 										</div>
 										<div class="field half">
+											<strong>Costo:</strong>
 											@Html.TextBoxFor(x => x.Cost, new { placeholder = "Costo"})
-											 <span asp-validation-for="Cost" class="text-danger"></span>
+											<span asp-validation-for="Cost" class="text-danger"></span>
+										</div>
+										<div class="field half">
+											<strong>Total presupuesto:</strong>
+											<input type ="text" id = "txtTotal" value ="0,0" readonly>								
 										</div>
 									</div>
 									<br>
@@ -128,16 +139,20 @@
 			<script src="~/assets/js/jquery.min.js" type="text/javascript"></script>  
 			<script type="text/javascript">
 			//Global Functions
+				var total = "0";
 				function Remove(button) {
 					//Determine the reference of the Row using the Button.
 					var row = $(button).closest("TR");
 					var name = $("TD", row).eq(0).html();
+					var cost = parseFloat($("TD", row).eq(4).html());
 					if (confirm("¿Desea eliminar el renglón: " + name +"?")) {
 						//Get the reference of the Table.
 						var table = $("#tblCustomers")[0];
  
 						//Delete the Table row using it's Index.
 						table.deleteRow(row[0].rowIndex);
+						total = parseFloat(total) - parseFloat(cost);
+						$("#txtTotal").val(total);
 					}
 				};
 				$(document).ready(function () {  
@@ -165,7 +180,7 @@
 						});  
 						return false;  
 					}) 
-					
+
 					//Dynamic Table
 					 $("body").on("click", "#btnAdd", function () {
 						var txtQuadrant = $("#QuadrantId option:selected");
@@ -235,6 +250,12 @@
 						btnRemove.attr("onclick", "Remove(this);");
 						btnRemove.val("Eliminar");
 						cell.append(btnRemove);
+
+						//Clear the TextBoxes.
+						txtObservation.val("");
+
+						total = parseFloat(total) +  parseFloat($("#Cost").val());
+						$("#txtTotal").val(total)
 					});
 
 

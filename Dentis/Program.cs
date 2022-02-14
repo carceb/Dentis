@@ -2,8 +2,13 @@ using Dentis.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using static Dentis.Core.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMvc();
+builder.Services.AddHttpContextAccessor();
+
 
 // Manage Sessions
 builder.Services.AddDistributedMemoryCache();

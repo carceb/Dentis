@@ -22,7 +22,7 @@
 
 	</head>
 	<body class="is-preload">
-			<div id="confirmDialog" class="myDiv"  title="Remove Assignment" hidden class="inner">
+			<div id="confirmDialog" class="myDiv"  title="Remove Assignment" hidden>
 					<p>Do you want to save changes </p>
 			</div>
 		<!-- Wrapper -->
@@ -31,8 +31,10 @@
 					<header id="header">
 						<div class="inner">
 							<!-- Logo -->
-								<a href="index.html" class="logo">
+								<a href="#" class="logo">
 									<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+									<br />
+									<span class="title">@ViewBag.ConsultingName</span>									
 								</a>
 
 							<!-- Nav -->
@@ -51,7 +53,7 @@
 							<li>@Html.ActionLink("Registrar paciente", "Add", "PatientRegistration")</li>
 							<li>@Html.ActionLink("Realizar presupuesto","SelectClient","Client")</li>
 							<li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
-							<li>@Html.ActionLink("Salir", "Index", "Login")</li>
+							<li>@Html.ActionLink("Salir", "Index", "Login")</li>	
 						</ul>
 					</nav>
 
@@ -97,6 +99,7 @@
 									<br>
 									<ul class="actions">
 										<li><input type="button" value="Registrar paciente" class="primary"  onclick="location.href='@Url.Action("Add", "PatientRegistration")'" /></li>
+										<li><button value="@ViewBag.ShareLink" class="primary" id="share-link-btn">Compartir enlace de la cola</button></li>
 									</ul>
 								</section>
 						</div>
@@ -112,6 +115,25 @@
 			<script src="~/assets/js/util.js"></script>
 			<script src="~/assets/js/main.js"></script>
 			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+			<script type="text/javascript">
+				$(document).ready(function () {  
+					 $("#share-link-btn").click(function (e) {
+						var element = $("#share-link-btn");
+						var url = element.val();
+						var temp = $("<input>");
+						$("body").append(temp);
+						temp.val(url).select();
+						document.execCommand("copy");
+						temp.remove();
+						element.text("Copiado, pegue en WhatsApp");
+						setTimeout(() => {
+							element.text("Compartir enlace de la cola");
+						}, 3000)
+					})
+				});				
+			</script>
+
+ 
 
 			@*PARA DIALOGO: FUNCIONA PERO NO SE VE VIEN EN LOS ESTILOS*@
 

@@ -49,10 +49,11 @@
 					<footer id="footer">
 						<div class="inner">
 							<section>
-								<h2>Indique los datos del cliente</h2>
+								<h2>Indique la cédula del cliente</h2>
 
 									<div class="fields">
 										<div class="field half">
+											<strong>Cédula:</strong>
 											@Html.TextBoxFor(x => x.IdentificationNumber, new { placeholder = "Cédula", tabindex = "0", maxlength = "12"})
 											 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
 										</div>

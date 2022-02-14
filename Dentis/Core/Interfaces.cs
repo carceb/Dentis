@@ -19,7 +19,7 @@ namespace Dentis.Core
 
         public interface IBudget
         {
-            public int SaveBudget(BudgetViweModel model);
+            public int SaveBudget(List<BudgetViweModel> model);
             public IList<BudgetViweModel> GetBudgetDetailByBudgetIdAndClinicConsultingId(int budgetId, int clinicConsultingId);
             public IList<BudgetViweModel> GetQuadrants();
             public IList<BudgetViweModel> GetQuadrantTooth(int quadrantId);

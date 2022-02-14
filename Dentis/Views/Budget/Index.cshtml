@@ -56,8 +56,9 @@
 											@Html.ActionLink((string)ViewBag.ClientName,"Edit", "Client", new { clientId = ViewBag.ClientId}, null)   
 	    								</div>
 										<div class="field half">
-@*											@Html.HiddenFor(t => t.ClientId)
-											@Html.HiddenFor(t => t.BudgetId)*@
+											@Html.HiddenFor(t => t.ClientId)
+											@Html.HiddenFor(t => t.BudgetId)
+											@Html.HiddenFor(t => t.ClinicConsultingId)
 											@Html.DropDownListFor(t => t.QuadrantId, (SelectList)ViewBag.Quadrant, "-- Seleccione el cuadrante --")
 										</div>
 										<div class="field half">
@@ -77,9 +78,7 @@
 									<br>
 									<ul class="actions">
 										<li><input type="button" id="btnAdd" value="Agregar a la lista"/></li>
-										<li><input type="button" id="btnSave" value="Save All" /></li>
-										<li><input type="submit" value="Guardar presupuesto" class="primary" /></li>
-										@*<li><input type="button" value="Seleccionar cliente" class="primary"  onclick="location.href='@Url.Action("SelectClient", "Client")'" /></li>*@
+										<li><input type="button" id="btnSave" value="Guardar presupuesto" /></li>
 									</ul>
 
 									<div class="table-wrapper">
@@ -174,6 +173,9 @@
 						var txtProcedure = $("#ProcedureId option:selected");					
 						var txtObservation = $("#Observation");
 						var txtCost = $("#Cost");
+						var txtQuadrantId = $("#QuadrantId");
+						var txtQuadrantToothId = $("#QuadrantToothId");
+						var txtProcedureId = $("#ProcedureId");
  
 						//Get the reference of the Table's TBODY element.
 						var tBody = $("#tblCustomers > TBODY")[0];
@@ -200,41 +202,74 @@
 						//Add Cost cell.
 						var cell = $(row.insertCell(-1));
 						cell.html(txtCost.val());
+
+						//Add QuadrantId cell.
+						var cell = $(row.insertCell(-1));
+						cell.html(txtQuadrantId.val());
+						cell.hide();
+
+						//Add QuadrantToothId cell
+						var cell = $(row.insertCell(-1));
+						cell.html(txtQuadrantToothId.val());
+						cell.hide();
+
+ 						//Add ProcedureId cell
+						var cell = $(row.insertCell(-1));
+						cell.html(txtProcedureId.val());
+						cell.hide();
+
+ 						//Add ClientId cell
+						var cell = $(row.insertCell(-1));
+						cell.html(@Model.ClientId.ToString());
+						cell.hide();
+
+ 						//Add ClinicConsultingId cell
+						var cell = $(row.insertCell(-1));
+						cell.html(@Model.ClinicConsultingId.ToString());
+						cell.hide();						
  
 						//Add Button cell.
 						cell = $(row.insertCell(-1));
 						var btnRemove = $("<input />");
 						btnRemove.attr("type", "button");
 						btnRemove.attr("onclick", "Remove(this);");
-						btnRemove.val("Remove");
+						btnRemove.val("Eliminar");
 						cell.append(btnRemove);
 					});
 
 
 					$("body").on("click", "#btnSave", function () {
-						//Loop through the Table rows and build a JSON array.
 						var customers = new Array();
 						$("#tblCustomers TBODY TR").each(function () {
 							var row = $(this);
 							var customer = {};
 							customer.Name = row.find("TD").eq(0).html();
 							customer.Country = row.find("TD").eq(1).html();
+							customer.Observation = row.find("TD").eq(3).html();
+							customer.Cost = row.find("TD").eq(4).html();
+							customer.QuadrantId = row.find("TD").eq(5).html();
+							customer.QuadrantToothId = row.find("TD").eq(6).html();
+							customer.ProcedureId = row.find("TD").eq(7).html();
+							customer.ClientId = row.find("TD").eq(8).html();
+							customer.ClinicConsultingId = row.find("TD").eq(9).html();
 							customers.push(customer);
 						});
 
-						//Send the JSON array to Controller using AJAX.
 						$.ajax({
 							type: "POST",
+							dataType: 'json',  
 							url: "/Budget/InsertBudget",
-							data: JSON.stringify(customers),
-							contentType: "application/json; charset=utf-8",
-							dataType: "json",
+							data: { customers: JSON.stringify(customers)}, 
 							success: function (r) {
-								alert(r + " record(s) inserted.");
+								if(r > 0){
+									alert("Presupuesto creado correctamente.");
+								}
+								else{
+									alert("Debe agregar los registros a la lista.");
+								}									
 							}
 						});
 					});
-
 				});  
 			</script>   
 	</body>

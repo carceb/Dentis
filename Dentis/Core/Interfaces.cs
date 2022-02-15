@@ -21,6 +21,7 @@ namespace Dentis.Core
         {
             public int SaveBudget(List<BudgetViweModel> model);
             public IList<BudgetViweModel> GetBudgetDetailByBudgetIdAndClinicConsultingId(int budgetId, int clinicConsultingId);
+            public IList<BudgetViweModel> GetBudgetDetailByClientIdAndClinicConsultingId(int clientId, int clinicConsultingId);
             public IList<BudgetViweModel> GetQuadrants();
             public IList<BudgetViweModel> GetQuadrantTooth(int quadrantId);
             public IList<BudgetViweModel> GetProcedures();

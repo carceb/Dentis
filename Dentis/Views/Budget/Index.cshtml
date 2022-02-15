@@ -281,15 +281,16 @@
 						$.ajax({
 							type: "POST",
 							dataType: 'json',  
-							url: "/Budget/InsertBudget",
+							url: "/Budget/AddBudget",
 							data: { customers: JSON.stringify(customers)}, 
 							success: function (r) {
 								if(r > 0){
-									alert("Presupuesto creado correctamente.");
-								}
-								else{
-									alert("Debe agregar los registros a la lista.");
-								}									
+								  var url = '@Url.Action("PrintBudget", "Budget")';
+								  url += '?budgetId=' + r + '&clinicConsultingId=' + @Model.ClinicConsultingId;
+								  window.location.href = url;
+									//var test ='@Url.Action("PrintBudget", "Budget")' +"?budgetId="+ r +"?clinicConsultingId="+@Model.ClinicConsultingId;
+									//window.location.href = '@Url.Action("PrintBudget", "Budget")' +"?budgetId="+ r +"?clinicConsultingId="+@Model.ClinicConsultingId;
+								}							
 							}
 						});
 					});

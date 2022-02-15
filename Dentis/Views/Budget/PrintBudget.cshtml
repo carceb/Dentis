@@ -1,0 +1,212 @@
+﻿@model List<Dentis.Models.BudgetViweModel>
+@{
+	Layout = "";
+}
+<!doctype html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <title>Presupuesto</title>
+  
+   <style>
+   .invoice-box {
+       max-width: 800px;
+       margin: auto;
+       padding: 30px;
+       border: 1px solid #eee;
+       box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+       font-size: 16px;
+       line-height: 24px;
+       font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+       color: #555;
+   }
+  
+   .invoice-box table {
+       width: 100%;
+       line-height: inherit;
+       text-align: left;
+   }
+  
+   .invoice-box table td {
+       padding: 5px;
+       vertical-align: top;
+   }
+  
+   .invoice-box table tr td:nth-child(4) {
+       text-align: right;
+   }
+  
+   .invoice-box table tr.top table td {
+       padding-bottom: 20px;
+   }
+  
+   .invoice-box table tr.top table td.title {
+       font-size: 45px;
+       line-height: 45px;
+       color: #333;
+   }
+  
+   .invoice-box table tr.information table td {
+       padding-bottom: 40px;
+   }
+  
+   .invoice-box table tr.heading td {
+       background: #eee;
+       border-bottom: 1px solid #ddd;
+       font-weight: bold;
+   }
+  
+   .invoice-box table tr.details td {
+       padding-bottom: 20px;
+   }
+  
+   .invoice-box table tr.item td{
+       border-bottom: 1px solid #eee;
+   }
+  
+   .invoice-box table tr.item.last td {
+       border-bottom: none;
+   }
+  
+   .invoice-box table tr.total td:nth-child(2) {
+       border-top: 2px solid #eee;
+       font-weight: bold;
+   }
+   </style>
+</head>
+
+<body>
+   <div class="invoice-box">
+       <table cellpadding="0" cellspacing="0">
+           <tr class="top">
+               <td colspan="4">
+                   <table>
+                       <tr>
+                           <td class="title">
+                               <img src="~/images/logo.svg" alt="" style="width:16%; max-width:26;"></span><span style ="font-size:large">Dentis</span>
+                           </td>
+                          <td></td>
+                          <td></td>
+                           <td>
+                               <b>Presupuesto #</b>@Model.FirstOrDefault().BudgetId<br>
+                               <b>Fecha</b> @Model.FirstOrDefault().BudgetDate.ToString("d")<br>
+                           </td>
+                       </tr>
+                   </table>
+               </td>
+           </tr>
+          
+           <tr class="information">
+               <td colspan="4">
+                   <table>
+                       <tr>
+                           <td>
+                               Consultorio: @Model.FirstOrDefault().ClinicConsultingName<br>
+                               Telefono: @Model.FirstOrDefault().ClinicConsultingPhone<br>
+                           </td>
+                          <td></td>
+                          <td></td>
+                           <td>
+                               Cliente: @Model.FirstOrDefault().ClientName<br>
+                               @Model.FirstOrDefault().ClientCellPhone<br>
+                               @Model.FirstOrDefault().ClientEmail
+                           </td>
+                       </tr>
+                   </table>
+               </td>
+           </tr>
+          
+           <tr class="heading">
+               <td>
+                   Metodo de Pago
+               </td>
+              <td></td>
+              <td></td>
+               <td>
+                   Total
+               </td>
+           </tr>
+          
+           <tr class="details">
+               <td>
+                   N/D
+               </td>                
+               <td></td>
+               <td></td>
+               <td>
+                   $@Model.FirstOrDefault().TotalBudget.ToString("F2")
+               </td>
+           </tr>
+          
+           <tr class="heading">
+               <td>
+                   Procedimiento
+               </td>
+               <td>
+                   Diente
+               </td>    
+               <td>
+                   Observación
+               </td>                 
+               <td>
+                   Costo
+               </td>
+           </tr>
+           @foreach (var item in Model)
+           {
+               <tr class="item">
+                   <td>
+                       @item.ProcedureName
+                   </td>
+                    <td>
+                        @item.ToothNumber
+                    </td>
+                    <td>
+                        @item.Observation
+                    </td>
+                   <td>
+                      $@item.Cost.ToString("F2")
+                   </td>
+               </tr>
+           }
+          
+           <tr class="total">
+               <td></td>
+              <td></td>
+              <td></td>
+               <td>
+                  Total: $@Model.FirstOrDefault().TotalBudget.ToString("F2")
+               </td>
+           </tr>
+       </table>
+   </div>
+   <div style ="text-align:center">
+       <br/>
+       <br/>
+        <button value="@ViewBag.ShareLink" class="primary" id="share-link-btn">Compartir enlace presupeusto</button>
+   </div>
+
+	<script src="~/assets/js/jquery.min.js"></script>
+	<script src="~/assets/js/browser.min.js"></script>
+	<script src="~/assets/js/breakpoints.min.js"></script>
+	<script src="~/assets/js/util.js"></script>
+	<script src="~/assets/js/main.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {  
+				$("#share-link-btn").click(function (e) {
+				var element = $("#share-link-btn");
+				var url = element.val();
+				var temp = $("<input>");
+				$("body").append(temp);
+				temp.val(url).select();
+				document.execCommand("copy");
+				temp.remove();
+				element.text("Copiado, pegar en correo o whatsapp");
+				setTimeout(() => {
+					element.text("Compartir enlace presupeusto");
+				}, 3000)
+			})
+		});				
+	</script>
+</body>
+</html>

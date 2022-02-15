@@ -68,7 +68,7 @@ namespace Dentis.Core
                 using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
                 {
                     sqlConnection.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM BudgetView WHERE BudgetId = " + budgetId + " AND ClinicConsultingId = " + clinicConsultingId, sqlConnection);
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM BudgetDetailViewWithTotal WHERE BudgetId = " + budgetId + " AND ClinicConsultingId = " + clinicConsultingId, sqlConnection);
                     SqlDataReader dr = cmd.ExecuteReader();
 
                     while (dr.Read())
@@ -84,9 +84,61 @@ namespace Dentis.Core
                             QuadrantId = (int)dr["QuadrantId"],
                             ToothNumber = (int)dr["ToothNumber"],
                             ProcedureName = (string)dr["ProcedureName"],
-                            Cost = (double)dr["Cost"],
+                            Cost = (decimal)dr["Cost"],
                             Observation = (string)dr["Observation"],
                             ProcedureId = (int)dr["ProcedureId"],
+                            ClinicConsultingName = (string)dr["ClinicConsultingName"],
+                            ClinicConsultingPhone = (string)dr["ClinicConsultingPhone"],
+                            BudgetDate = (DateTime)dr["BudgetDate"],
+                            TotalBudget = (decimal)dr["TotalBudget"],
+                            ClientCellPhone = (string)dr["ClientCellPhone"],
+                            ClientEmail = (string)dr["ClientEmail"]
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return budgets.ToList();
+        }
+
+        public IList<BudgetViweModel> GetBudgetDetailByClientIdAndClinicConsultingId(int clientId, int clinicConsultingId)
+        {
+            List<BudgetViweModel> budgets = new List<BudgetViweModel>();
+
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
+                {
+                    sqlConnection.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM BudgetDetailViewWithTotal WHERE ClientId = " + clientId + " AND ClinicConsultingId = " + clinicConsultingId, sqlConnection);
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        budgets.Add(new BudgetViweModel
+                        {
+                            BudgetId = (int)dr["BudgetId"],
+                            BudgetDetailId = (int)dr["BudgetDetailId"],
+                            ClientId = (int)dr["ClientId"],
+                            ClinicConsultingId = clinicConsultingId,
+                            ClientName = (string)dr["ClientName"],
+                            QuadrantName = (string)dr["QuadrantName"],
+                            QuadrantId = (int)dr["QuadrantId"],
+                            ToothNumber = (int)dr["ToothNumber"],
+                            ProcedureName = (string)dr["ProcedureName"],
+                            Cost = (decimal)dr["Cost"],
+                            Observation = (string)dr["Observation"],
+                            ProcedureId = (int)dr["ProcedureId"],
+                            ClinicConsultingName = (string)dr["ClinicConsultingName"],
+                            ClinicConsultingPhone = (string)dr["ClinicConsultingPhone"],
+                            BudgetDate = (DateTime)dr["BudgetDate"],
+                            TotalBudget = (decimal)dr["TotalBudget"],
+                            ClientCellPhone = (string)dr["ClientCellPhone"],
+                            ClientEmail = (string)dr["ClientEmail"]
                         });
                     }
                 }

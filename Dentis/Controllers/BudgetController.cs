@@ -57,7 +57,7 @@ namespace Dentis.Controllers
             return RedirectToAction("Error", "Home");
         }
 
-        public JsonResult InsertBudget(string customers)
+        public JsonResult AddBudget(string customers)
         {
             int budgetId = 0;
 
@@ -70,6 +70,38 @@ namespace Dentis.Controllers
 
             return Json(budgetId);
         }
+
+        public IActionResult PrintBudget(int budgetId, int clinicConsultingId)
+        {
+            if (budgetId > 0)
+            {
+                ViewBag.ShareLink = $"{Request.Scheme}://{Request.Host.Value}{Request.Path.Value}/PrintBudget?budgetId={budgetId}&clinicConsultingId={clinicConsultingId}";
+                var model = _budget.GetBudgetDetailByBudgetIdAndClinicConsultingId(budgetId, clinicConsultingId);
+                return View(model);
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        public IActionResult ListBudgets(int clientId)
+        {
+            int clinicConsultingId = 0;
+            if (clientId > 0)
+            {
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    clinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
+
+                    var model = _budget.GetBudgetDetailByClientIdAndClinicConsultingId(clientId, clinicConsultingId);
+                    if (model.Any())
+                    {
+                        return View(model);
+                    }                    
+                }
+            }
+
+            return RedirectToAction("Error", "Home");
+        }        
 
         public JsonResult GetQuadrantTooth(int quadrantToothId)
         {

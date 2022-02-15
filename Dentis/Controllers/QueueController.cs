@@ -20,7 +20,7 @@ namespace Dentis.Controllers
             if (HttpContext.Session.GetString("ClinicConsultingName") != null)
             {
                 ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                ViewBag.ShareLink =  $"{Request.Host.Value}{Request.Path.Value}/CheckQueueFromExternal?clinicConsultingId={(int)HttpContext.Session.GetInt32("ClinicConsultingId")}";
+                ViewBag.ShareLink =  $"{Request.Scheme}://{Request.Host.Value}{Request.Path.Value}/CheckQueueFromExternal?clinicConsultingId={(int)HttpContext.Session.GetInt32("ClinicConsultingId")}";
                 ViewBag.QueueStatus = new SelectList(this._queue.GetQueueEstatus(), "QueueEstatusId", "QueueEstatusName");
                 return View(_queue.GetActiveQueue((int)HttpContext.Session.GetInt32("ClinicConsultingId")));
             }

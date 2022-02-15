@@ -75,7 +75,9 @@ namespace Dentis.Core
                         PatientGender = (string)dr["PatientGender"],
                         PatientAge = (int)dr["PatientAge"],
                         AppointmentReasonId = (int)dr["AppointmentReasonId"],
-                        AppointmentReasonName = (string)dr["AppointmentReasonName"]
+                        AppointmentReasonName = (string)dr["AppointmentReasonName"],
+                        ClinicConsultingId = (int)dr["ClinicConsultingId"],
+                        ClinicConsultingName = (string)dr["ClinicConsultingName"]
                     });
                 }
             }

@@ -50,38 +50,45 @@
 					<footer id="footer">
 						<div class="inner">
 							<section>
-								<h2>Indique los datos del cliente</h2>
-
+								<h5>Datos del cliente</h5>
+								<br/>
+								
 									<div class="fields">
 										<div class="field half">
+											<strong>Cédula:</strong>
 											@Html.HiddenFor(x=> x.ClientId)
 											@Html.TextBoxFor(x => x.IdentificationNumber, new { @readonly = true})	
 										</div>
 										<div class="field half">
+											<strong>Nombre:</strong>
 											@Html.TextBoxFor(x => x.ClientName, new { placeholder = "Nombre"})
 											 <span asp-validation-for="ClientName" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Genero:</strong>
 											@Html.DropDownListFor(t => t.Gender, (SelectList)ViewBag.Gender)
 										</div>
 										<div class="field half">
+											<strong>Fecha de nacimiento:</strong>
 											@Html.TextBoxFor(m => m.BirthDate, new { @class = "getdate", @readonly = true })
 											 <span asp-validation-for="BirthDate" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Dirección:</strong>
 											@Html.TextBoxFor(x => x.ClientAddress, new { placeholder = "Dirección"})
 										</div>
 										<div class="field half">
+											<strong>Teléfono:</strong>
 											@Html.TextBoxFor(x => x.ClientCellPhone, new { placeholder = "Número de Teléfono"})
 										</div>
 										<div class="field half">
+											<strong>Email:</strong>
 											@Html.TextBoxFor(x => x.ClientEmail, new { placeholder = "Email"})
 										</div>
 									</div>
 									<br>
 									<ul class="actions">
 										<li><input type="submit" value="Actualizar" class="primary" /></li>
-										<li><input type="button" value="Realizar presupuesto" class="primary"  onclick="location.href='@Url.Action("Index", "Queue")'" /></li>
 									</ul>
 								</section>
 						</div>

@@ -1,6 +1,7 @@
 ﻿using Dentis.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using static Dentis.Core.Interfaces;
 
 namespace Dentis.Controllers
@@ -22,6 +23,8 @@ namespace Dentis.Controllers
 
                 ViewBag.ClientId = clientId;
                 ViewBag.ClientName = _client.GetClientById(clientId).Select(x => x.ClientName).FirstOrDefault();
+                budgetViweModel.ClientId = clientId;
+                budgetViweModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
 
                 ViewBag.Quadrant = new SelectList(this._budget.GetQuadrants(), "QuadrantId", "QuadrantName");
                 ViewBag.QuadrantTooth = new SelectList(this._budget.GetQuadrantTooth(1), "QuadrantToothId", "ToothNumber");
@@ -42,30 +45,28 @@ namespace Dentis.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    int budgetId = _budget.SaveBudget(model);
-                    if (budgetId > 0)
-                    {
-                        return RedirectToAction("Index", "Budget", new { clientId = model.ClientId, budgetId = budgetId });
-                    }
+                    //int budgetId = _budget.SaveBudget(model);
+                    //if (budgetId > 0)
+                    //{
+                    //    return RedirectToAction("Index", "Budget", new { clientId = model.ClientId, budgetId = budgetId });
+                    //}
                 }
             }
 
             return RedirectToAction("Error", "Home");
         }
 
-        public JsonResult InsertBudget(List<Customer> customers)
+        public JsonResult InsertBudget(string customers)
         {
             int budgetId = 0;
-            if (customers == null)
+
+            if (customers != "[]")
             {
-                customers = new List<Customer>();
+                var list = JsonExtensions.FromDelimitedJson<BudgetViweModel>(new StringReader(customers.Replace("[", string.Empty).Replace("]", string.Empty))).ToList();
+
+                budgetId = _budget.SaveBudget(list);
             }
 
-            //Loop and insert records.
-            //foreach (BudgetViweModel customer in customers)
-            //{
-            //    budgetId = _budget.SaveBudget(customer);
-            //}
             return Json(budgetId);
         }
 
@@ -80,5 +81,24 @@ namespace Dentis.Controllers
 
             return Json(new SelectList(quadrantTooths, "Value", "Text"));
         }
+
+        public static partial class JsonExtensions
+        {
+            public static IEnumerable<T> FromDelimitedJson<T>(TextReader reader, JsonSerializerSettings settings = null)
+            {
+                using (var jsonReader = new JsonTextReader(reader) { CloseInput = false, SupportMultipleContent = true })
+                {
+                    var serializer = JsonSerializer.CreateDefault(settings);
+
+                    while (jsonReader.Read())
+                    {
+                        if (jsonReader.TokenType == JsonToken.Comment)
+                            continue;
+                        yield return serializer.Deserialize<T>(jsonReader);
+                    }
+                }
+            }
+        }
     }
+
 }

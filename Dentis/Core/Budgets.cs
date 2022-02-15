@@ -11,25 +11,47 @@ namespace Dentis.Core
         {
             this._configuration = configuration;
         }
-        public int SaveBudget(BudgetViweModel model)
+        public int SaveBudget(List<BudgetViweModel> model)
         {
+            int result = 0;
             try
             {
                 using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
                 {
-                    sqlConnection.Open();
-                    SqlCommand cmd = new SqlCommand("BudgetAddOrEdit", sqlConnection);
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("BudgetId", model.BudgetId);
-                    cmd.Parameters.AddWithValue("ClientId", model.ClientId);
-                    cmd.Parameters.AddWithValue("BudgetDetailId", model.BudgetDetailId);
-                    cmd.Parameters.AddWithValue("QuadrantToothId", model.QuadrantToothId);
-                    cmd.Parameters.AddWithValue("ProcedureId", model.ProcedureId);
-                    cmd.Parameters.AddWithValue("Cost", model.Cost);
-                    cmd.Parameters.AddWithValue("ClinicConsultingID", model.ClinicConsultingId);
+                    if (model.Any())
+                    {
+                        sqlConnection.Open();
+                        SqlCommand cmd = new SqlCommand("BudgetAddOrEdit", sqlConnection);
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    return Convert.ToInt32(cmd.ExecuteScalar());
+                        cmd.Parameters.AddWithValue("BudgetId", model.FirstOrDefault().BudgetId);
+                        cmd.Parameters.AddWithValue("ClientId", model.FirstOrDefault().ClientId);
+                        cmd.Parameters.AddWithValue("ClinicConsultingID", model.FirstOrDefault().ClinicConsultingId);
+
+                        result = Convert.ToInt32(cmd.ExecuteScalar());
+                    }                    
                 }
+
+                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
+                {
+                    sqlConnection.Open();
+                    SqlCommand cmd = new SqlCommand("BudgeDetailtAddOrEdit", sqlConnection);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    foreach (var item in model)
+                    {
+                        cmd.Parameters.AddWithValue("BudgetId", result);
+                        cmd.Parameters.AddWithValue("BudgetDetailId", item.BudgetDetailId);
+                        cmd.Parameters.AddWithValue("QuadrantToothId", item.QuadrantToothId);
+                        cmd.Parameters.AddWithValue("ProcedureId", item.ProcedureId);
+                        cmd.Parameters.AddWithValue("Observation", item.Observation);
+                        cmd.Parameters.AddWithValue("Cost", item.Cost);
+                        cmd.ExecuteScalar();
+                        cmd.Parameters.Clear();
+                    }
+                }
+
+                return result;
             }
             catch (Exception)
             {

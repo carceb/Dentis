@@ -19,6 +19,7 @@ namespace Dentis.Controllers
             if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
                 ClientViewModel clientViewModel = new ClientViewModel();
+                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
                 return View(clientViewModel);
             }
             else
@@ -54,6 +55,7 @@ namespace Dentis.Controllers
         {
             if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
+                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
                 ClientViewModel list = new ClientViewModel();
                 var model = _client.GetClientById(clientId).FirstOrDefault();
 
@@ -72,6 +74,7 @@ namespace Dentis.Controllers
         {
             if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
+                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
                 _client.SaveClient(model);
                 return RedirectToAction("SelectClient");
             }
@@ -85,6 +88,7 @@ namespace Dentis.Controllers
         {
             if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
+                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
                 ClientViewModel clientViewModel = new ClientViewModel();
                 clientViewModel.IdentificationNumber = idNumber;
 

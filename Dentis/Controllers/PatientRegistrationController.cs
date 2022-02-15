@@ -22,6 +22,7 @@ namespace Dentis.Controllers
             {
                 PatientViewModel patientViewModel = new PatientViewModel();
 
+                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
                 ViewBag.PatientGender = new SelectList(GetGenders());
                 ViewBag.PatientAges = new SelectList(GetAges());
                 ViewBag.AppointmentReason = new SelectList(this._appointmentReason.GetAppointmentReasons(), "AppointmentReasonId", "AppointmentReasonName");

@@ -23,6 +23,7 @@ namespace Dentis.Controllers
 
                 ViewBag.ClientId = clientId;
                 ViewBag.ClientName = _client.GetClientById(clientId).Select(x => x.ClientName).FirstOrDefault();
+                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
                 budgetViweModel.ClientId = clientId;
                 budgetViweModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
 

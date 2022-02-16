@@ -1,6 +1,6 @@
 ﻿@model Dentis.Models.PatientViewModel
 @{
-	Layout = "";    
+  Layout = "";    
 }
 <!DOCTYPE HTML>
 <html>
@@ -14,85 +14,86 @@
 	<body class="is-preload">
 	@using(Html.BeginForm("Add", "PatientRegistration", FormMethod.Post))
 	{
-	<!-- Wrapper -->
-			<div id="wrapper">
+		<!-- Wrapper -->
+		<div id="wrapper">
 
-				<!-- Header -->
-					<header id="header">
-						<div class="inner">
+			<!-- Header -->
+			  <header id="header">
+				<div class="inner">
 
-							<!-- Logo -->
-								<a href="index.html" class="logo">
-									<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
-									<br />
-									<span class="title">@ViewBag.ConsultingName</span>
-								</a>
-						</div>
-						<!-- Nav -->
-							<nav>
-								<ul>
-									<li><a href="#menu">Menu</a></li>
-								</ul>
-							</nav>
-					</header>
+				  <!-- Logo -->
+					<a href="index.html" class="logo">
+					  <span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+					  <br />
+					  <span class="title">@ViewBag.ConsultingName</span>
+					</a>
+				</div>
+				<!-- Nav -->
+				  <nav>
+					<ul>
+					  <li><a href="#menu">Menu</a></li>
+					</ul>
+				  </nav>
+			  </header>
 
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li>@Html.ActionLink("Pacientes en cola", "Index", "Queue")</li>
-							<li>@Html.ActionLink("Realizar presupuesto","SelectClient","Client")</li>
-							<li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
-							<li>@Html.ActionLink("Salir", "Index", "Login")</li>
-						</ul>
-					</nav>
+			<!-- Menu -->
+			  <nav id="menu">
+				<h2>Menu</h2>
+				<ul>
+				  <li>@Html.ActionLink("Pacientes en cola", "Index", "Queue")</li>
+				  <li>@Html.ActionLink("Realizar presupuesto","SelectClient","Client")</li>
+				  <li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
+				  <li>@Html.ActionLink("Salir", "Index", "Login")</li>
+				</ul>
+			  </nav> 
 
-				<!-- Footer -->
-					<footer id="footer">
-						<div class="inner">
-							<section>
-								<h2>Datos del paciente</h2>
-
-									<div class="fields">
-										<div class="field half">
-											<strong>Nombre:</strong>
-											@Html.TextBoxFor(x => x.PatientName, new { placeholder = "Nombre del paciente"})
-											 <span asp-validation-for="PatientName" class="text-danger"></span>
-										</div>
-										<div class="field half">
-											<strong>Edad:</strong>
-											@Html.DropDownListFor(t => t.PatientAge, (SelectList)ViewBag.PatientAges, "-- Seleccione edad --")
-										</div>
-										<div class="field half">
-											<strong>Genero:</strong>
-											@Html.DropDownListFor(t => t.PatientGender, (SelectList)ViewBag.PatientGender, "-- Seleccione genero --")
-										</div>
-										<div class="field half">
-											<strong>Motivo consulta:</strong>
-											@Html.DropDownListFor(t => t.AppointmentReasonId, (SelectList)ViewBag.AppointmentReason, "-- Seleccione motivo de consulta --")
-										</div>
-									</div>
-									<br>
+			<!-- Main -->
+			<div id="main">
+				<div class="inner">
+					<!-- Form -->
+						<section>
+							<h2>Datos del paciente</h2>
+							<div class="row gtr-uniform">
+								<div class="col-6 col-12-xsmall">
+									<strong>Nombre:</strong>
+									@Html.TextBoxFor(x => x.PatientName, new { placeholder = "Nombre del paciente"})
+									<span asp-validation-for="PatientName" class="text-danger"></span>
+								</div>
+								<div class="col-6 col-12-xsmall">
+									<strong>Edad:</strong>
+									@Html.DropDownListFor(t => t.PatientAge, (SelectList)ViewBag.PatientAges, "-- Seleccione edad --")
+								</div>
+								<div class="col-6 col-12-xsmall">
+									<strong>Genero:</strong>
+									@Html.DropDownListFor(t => t.PatientGender, (SelectList)ViewBag.PatientGender, "-- Seleccione genero --")
+								</div>
+								<div class="col-6 col-12-xsmall">
+									<strong>Motivo consulta:</strong>
+									@Html.DropDownListFor(t => t.AppointmentReasonId, (SelectList)ViewBag.AppointmentReason, "-- Seleccione motivo de consulta --")
+								</div>
+								<div class="col-12">
 									<ul class="actions">
 										<li><input type="submit" value="Enviar a la cola" class="primary" /></li>
-										<li><input type="button" value="Pacientes en cola" class="primary"  onclick="location.href='@Url.Action("Index", "Queue")'" /></li>
-									</ul>
-								</section>
-						</div>
-					</footer>
-			</div>	
+										<li><input type="button" value="Pacientes en cola"  onclick="location.href='@Url.Action("Index", "Queue")'" /></li>											</ul>
+								</div>
+							</div>
+						</section>
+				</div>
+			</div>
+
+			<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+					</div>
+				</footer>
+		</div>	
 	}
-
 		<!-- Scripts -->
-			<script src="~/assets/js/jquery.min.js"></script>
-			<script src="~/assets/js/browser.min.js"></script>
-			<script src="~/assets/js/breakpoints.min.js"></script>
-			<script src="~/assets/js/util.js"></script>
-			<script src="~/assets/js/main.js"></script>
-			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-
-
+		  <script src="~/assets/js/jquery.min.js"></script>
+		  <script src="~/assets/js/browser.min.js"></script>
+		  <script src="~/assets/js/breakpoints.min.js"></script>
+		  <script src="~/assets/js/util.js"></script>
+		  <script src="~/assets/js/main.js"></script>
+		  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 	</body>
 </html>
-

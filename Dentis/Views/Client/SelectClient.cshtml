@@ -1,83 +1,86 @@
 ﻿@model Dentis.Models.ClientViewModel
 @{
-	Layout = "";    
+  Layout = "";    
 }
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>Dentis</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="~/assets/css/main.css" />
-		<noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
-	</head>
+      <head>
+        <title>Dentis</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="~/assets/css/main.css" />
+        <noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
+      </head>
 	<body class="is-preload">
-	@using(Html.BeginForm("SelectClient", "Client", FormMethod.Post))
+    @using(Html.BeginForm("SelectClient", "Client", FormMethod.Post))
 	{
-	<!-- Wrapper -->
-			<div id="wrapper">
+		<!-- Wrapper -->
+		<div id="wrapper">
 
-				<!-- Header -->
-					<header id="header">
-						<div class="inner">
+        <!-- Header -->
+          <header id="header">
+            <div class="inner">
 
-							<!-- Logo -->
-								<a href="index.html" class="logo">
-									<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
-									<br />
-									<span class="title">@ViewBag.ConsultingName</span>
-								</a>
-						</div>
-						<!-- Nav -->
-							<nav>
-								<ul>
-									<li><a href="#menu">Menu</a></li>
-								</ul>
-							</nav>
-					</header>
+              <!-- Logo -->
+                <a href="index.html" class="logo">
+                  <span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+                  <br />
+                  <span class="title">@ViewBag.ConsultingName</span>
+                </a>
+            </div>
+            <!-- Nav -->
+              <nav>
+                <ul>
+                  <li><a href="#menu">Menu</a></li>
+                </ul>
+              </nav>
+          </header>
 
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li>@Html.ActionLink("Registrar paciente", "Add", "PatientRegistration")</li>
-							<li>@Html.ActionLink("Pacientes en cola", "Index", "Queue")</li>
-							<li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
-							<li>@Html.ActionLink("Salir", "Index", "Login")</li>
-						</ul>
-					</nav>
+        <!-- Menu -->
+          <nav id="menu">
+            <h2>Menu</h2>
+            <ul>
+              <li>@Html.ActionLink("Registrar paciente", "Add", "PatientRegistration")</li>
+              <li>@Html.ActionLink("Pacientes en cola", "Index", "Queue")</li>
+              <li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
+              <li>@Html.ActionLink("Salir", "Index", "Login")</li>
+            </ul>
+          </nav>
 
-				<!-- Footer -->
-					<footer id="footer">
-						<div class="inner">
-							<section>
-								<h2>Indique la cédula del cliente</h2>
-
-									<div class="fields">
-										<div class="field half">
-											<strong>Cédula:</strong>
-											@Html.TextBoxFor(x => x.IdentificationNumber, new { placeholder = "Cédula", tabindex = "0", maxlength = "12"})
-											 <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
-										</div>
+			<div id="main">
+				<div class="inner">
+					<!-- Form -->
+						<section>
+                            <h2>Indique la cédula del cliente</h2>
+								<div class="row gtr-uniform">
+									<div class="col-6 col-12-xsmall">
+                                        <strong>Cédula:</strong>
+                                        @Html.TextBoxFor(x => x.IdentificationNumber, new { placeholder = "Cédula", tabindex = "0", maxlength = "12"})
+                                        <span asp-validation-for="IdentificationNumber" class="text-danger"></span>
 									</div>
-									<br>
-									<ul class="actions">
-										<li><input type="submit" value="Buscar" class="primary" /></li>
-									</ul>
-								</section>
-						</div>
-					</footer>
-			</div>	
-	}
+									<div class="col-12">
+										<ul class="actions">
+                                           <li><input type="submit" value="Buscar" class="primary" /></li>
+										</ul>
+									</div>
+								</div>
+						</section>
+				</div>
+			</div>
 
-		<!-- Scripts -->
-			<script src="~/assets/js/jquery.min.js"></script>
-			<script src="~/assets/js/browser.min.js"></script>
-			<script src="~/assets/js/breakpoints.min.js"></script>
-			<script src="~/assets/js/util.js"></script>
-			<script src="~/assets/js/main.js"></script>
-			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+			<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+					</div>
+				</footer>
+		</div>	
+	}
+    <!-- Scripts -->
+      <script src="~/assets/js/jquery.min.js"></script>
+      <script src="~/assets/js/browser.min.js"></script>
+      <script src="~/assets/js/breakpoints.min.js"></script>
+      <script src="~/assets/js/util.js"></script>
+      <script src="~/assets/js/main.js"></script>
+      @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 	</body>
 </html>
-
-

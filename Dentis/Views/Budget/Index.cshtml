@@ -59,7 +59,8 @@
 							    <div class="col-12">
 								    <strong>Ciente:&nbsp;&nbsp;</strong>
 								    @Html.ActionLink((string)ViewBag.ClientName,"Edit", "Client", new { clientId = ViewBag.ClientId}, null)
-                                    <hr />
+                                    <br/>
+								    <strong>Total presupuesto:</strong><label id="txtTotal" text ="0">0</label>
 							    </div>
 							    <div class="col-6 col-12-xsmall">
 								    <strong>Cuadrante:</strong>
@@ -81,18 +82,14 @@
 							    </div>
 							    <div class="col-6 col-12-xsmall">
 								    <strong>Costo:</strong>
-								    @Html.TextBoxFor(x => x.Cost, new { placeholder = "Costo"})
+								    @Html.TextBoxFor(x => x.Cost, new {maxlength = "7", placeholder = "Costo", onclick= "$(this).select();", onkeypress="return isNumberKey(event)"})
 								    <span asp-validation-for="Cost" class="text-danger"></span>
-							    </div>
-							    <div class="col-6 col-12-xsmall">
-								    <strong>Total presupuesto:</strong>
-								    <input type ="text" id = "txtTotal" value ="0,0" readonly>    
 							    </div>
 							    <div class="col-12">
 							    <br />
 							    <ul class="actions">
 								    <li><input type="button" id="btnAdd" value="Agregar a la lista"/></li>
-								    <li><input type="button" id="btnSave" class="primary" value="Guardar presupuesto" /></li>
+								    <li><input type="button" id="btnSave" class="primary" value="Imprmir presupuesto" /></li>
 							    </ul>
 							    </div>
 						    </div>
@@ -153,6 +150,19 @@
       <script type="text/javascript">
       //Global Functions
         var total = "0";
+
+        function isNumberKey(evt)
+        {
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            if(charCode == 44){
+                return true;
+            }
+            if (charCode != 46 && charCode > 31 
+            && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
         function Remove(button) {
           //Determine the reference of the Row using the Button.
           var row = $(button).closest("TR");
@@ -165,7 +175,8 @@
             //Delete the Table row using it's Index.
             table.deleteRow(row[0].rowIndex);
             total = parseFloat(total) - parseFloat(cost);
-            $("#txtTotal").val(total);
+            $("#txtTotal").empty();
+            $("#txtTotal").append(new Intl.NumberFormat("de-DE").format(total));
           }
         };
         $(document).ready(function () {  
@@ -204,6 +215,26 @@
             var txtQuadrantId = $("#QuadrantId");
             var txtQuadrantToothId = $("#QuadrantToothId");
             var txtProcedureId = $("#ProcedureId");
+
+            if(txtQuadrantId.val() == ""){
+                alert("Debe seleccionar el cuadrante y presionar agregar a la lista");
+                return;
+            }
+
+            if(txtQuadrantToothId.val() == ""){
+                alert("Debe seleccionar el diente y presionar agregar a la lista");
+                return;
+            }
+
+            if(txtProcedureId.val() == ""){
+                alert("Debe seleccionar el procedimiento y presionar agregar a la lista");
+                return;
+            }
+
+            if(txtCost.val() == "" || txtCost.val() == "0"){
+                alert("Debe colocar el costo y presionar agregar a la lista");
+                return;
+            }
  
             //Get the reference of the Table's TBODY element.
             var tBody = $("#tblCustomers > TBODY")[0];
@@ -268,10 +299,11 @@
             txtObservation.val("");
 
             total = parseFloat(total) +  parseFloat($("#Cost").val());
-            $("#txtTotal").val(total)
+            $("#txtTotal").empty();
+            $("#txtTotal").append(new Intl.NumberFormat("de-DE").format(total));
           });
 
-
+          var updated = "false";
           $("body").on("click", "#btnSave", function () {
             var customers = new Array();
             $("#tblCustomers TBODY TR").each(function () {
@@ -287,6 +319,7 @@
               customer.ClientId = row.find("TD").eq(8).html();
               customer.ClinicConsultingId = row.find("TD").eq(9).html();
               customers.push(customer);
+              updated = "true";
             });
 
             $.ajax({
@@ -302,8 +335,12 @@
                 }             
               }
             });
-          });
-        });  
+                if(updated =="false"){
+                    alert("Debe agregar items a la lista para poder generar el presupuesto")
+                }
+            });  
+         });
+
       </script>   
 	</body>
 </html>

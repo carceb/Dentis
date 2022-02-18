@@ -94,9 +94,10 @@ table th {
 <body>
     <div class="table-responsive">  
         <table>
-          <caption>Presupuestos solicitados por <br/></caption>
+          <caption>Presupuestos solicitados por <br/>@Model.FirstOrDefault().ClientName</caption>
           <thead>
             <tr>
+              <th scope="col">#</th>
               <th scope="col">Fecha</th>
               <th scope="col">Cuadrante</th>
               <th scope="col">Diente</th>
@@ -107,10 +108,12 @@ table th {
 			@foreach (var budgets in Model)
 			{
                 <tr>
-                  <td data-label="Account">@budgets.BudgetDate</td>
-                  <td data-label="Due Date">@budgets.QuadrantName</td>
-                  <td data-label="Amount">@budgets.ToothNumber</td>
-                  <td data-label="Period">@budgets.Cost</td>
+                  <td data-label="#">@Html.ActionLink(@budgets.BudgetId.ToString(),"PrintBudget", "Budget", new { budgetId = budgets.BudgetId, clinicConsultingId = budgets.ClinicConsultingId}, null)</td>
+                  <td data-label="#">@budgets.BudgetId</td>
+                  <td data-label="Fecha">@budgets.BudgetDate</td>
+                  <td data-label="Cuadrante">@budgets.QuadrantName</td>
+                  <td data-label="Diente">@budgets.ToothNumber</td>
+                  <td data-label="Costo">@budgets.Cost</td>
                 </tr>
             }
           </tbody>

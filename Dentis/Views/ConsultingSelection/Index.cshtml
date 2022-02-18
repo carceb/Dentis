@@ -33,24 +33,30 @@
 						<section>
 						<h2>Seleccione Clínica y Consultorio</h2>
 							<br/>
-							<br/>
+						<section>
+							<div class="box alt">
 								<div class="row gtr-uniform">
-									<div class="col-6 col-12-xsmall">
-									  <strong>Clínica:</strong>
-									  @Html.DropDownListFor(t => t.ClinicId, (SelectList)@ViewBag.Clinic)
-									</div>
-									<div class="col-6 col-12-xsmall">
-									  <strong>Consultorio:</strong>
-									  @Html.TextBoxFor(m => m.ClinicConsultingName, new { style = "display: none;" })
-									  @Html.DropDownListFor(t => t.ClinicConsultingId , (SelectList)ViewBag.ClinicConsulting, "-- Seleccione el consultorio --")
-									  <span asp-validation-for="ClinicConsultingId" class="text-danger"></span>
-									</div>
-									<div class="col-12">
-										<ul class="actions">
-											<li><input type="submit" value="Entrar" class="primary" /></li>
-										</ul>
-									</div>
+									<div class="col-12"><span class="image fit"><img src="images/consulting2.png" alt="" /></span></div>
 								</div>
+							</div>
+						</section>
+						<div class="row gtr-uniform">
+							<div class="col-6 col-12-xsmall">
+								<strong>Clínica:</strong>
+								@Html.DropDownListFor(t => t.ClinicId, (SelectList)@ViewBag.Clinic)
+							</div>
+							<div class="col-6 col-12-xsmall">
+								<strong>Consultorio:</strong>
+								@Html.TextBoxFor(m => m.ClinicConsultingName, new { style = "display: none;" })
+								@Html.DropDownListFor(t => t.ClinicConsultingId , (SelectList)ViewBag.ClinicConsulting, "-- Seleccione el consultorio --")
+								<span asp-validation-for="ClinicConsultingId" class="text-danger"></span>
+							</div>
+							<div class="col-12">
+								<ul class="actions">
+									<li><input type="submit" value="Entrar" class="primary" /></li>
+								</ul>
+							</div>
+						</div>
 						</section>
 				</div>
 			</div>

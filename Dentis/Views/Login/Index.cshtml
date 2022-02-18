@@ -36,14 +36,20 @@
 				<div class="inner">
 					<!-- Form -->
 						<section>
-                            <h2>Indique el usuario y la clave</h2>
-
+							<div class="box alt">
 								<div class="row gtr-uniform">
-									<div class="col-6 col-12-xsmall">
+									<div class="col-12"><span class="image fit"><img src="images/limpiezadental.png" alt="" /></span></div>
+								</div>
+							</div>
+						</section>
+						<section>
+                            <h2>Indique el usuario y la clave</h2>
+								<div class="row gtr-uniform">
+									<div class="col-12">
                                       @Html.TextBoxFor(x => x.UserLogin, new { placeholder = "Nombre de usuario"})
                                        <span asp-validation-for="UserLogin" class="text-danger"></span>
 									</div>
-									<div class="col-6 col-12-xsmall">
+									<div class="col-12">
                                       @Html.PasswordFor(x => x.UserPassword, new { placeholder = "Clave"})
                                       <span asp-validation-for="UserPassword" class="text-danger"></span>
 									</div>
@@ -54,6 +60,17 @@
 									</div>
 								</div>
 						</section>
+						<br/>
+						<section>
+							<h2>Siganos</h2>
+							<ul class="icons">
+								<li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
+								<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Teléfono</span></a></li>
+								<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
+							</ul>
+						</section>
 				</div>
 			</div>
 
@@ -61,7 +78,7 @@
 				<footer id="footer">
 					<div class="inner">
                       <ul class="copyright">
-                        <li>&copy; Untitled. All rights reserved</li><li>Design: Carlos Ceballos</li>
+                        <li>&copy; Dentis. All rights reserved</li>
                       </ul>
 					</div>
 				</footer>

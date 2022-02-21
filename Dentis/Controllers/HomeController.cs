@@ -19,6 +19,7 @@ namespace Dentis.Controllers
             if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
                 ViewBag.UserName = UserName();
+                ViewBag.IsSuperUser = Utils.Utils.IsSuperUser((int)HttpContext.Session.GetInt32("SecurityUserTypeId"));
                 ViewBag.ClinicName = (string)HttpContext.Session.GetString("ClinicName");
                 ViewBag.ClinicConsultingName = (string)HttpContext.Session.GetString("ClinicConsultingName");
                 return View(_patient.GetPatients());

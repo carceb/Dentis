@@ -6,17 +6,44 @@ namespace Dentis.Core
 {
     public class SecurityManager : ISecurity
     {
-        private IConfiguration Configuration;
-        public SecurityManager(IConfiguration _configuration)
+        private IConfiguration _configuration;
+        public SecurityManager(IConfiguration configuration)
         {
-            Configuration = _configuration;
+            _configuration = configuration;
+        }
+
+        public int AddOrEdit(SecurityUserModel model)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
+                {
+                    var userStatus = (model.SecurityUserId == 0 ? "1" : model.SecurityUserStatus);
+
+                    sqlConnection.Open();
+                    SqlCommand cmd = new SqlCommand("UserAddOrEdit", sqlConnection);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("SecurityUserId", model.SecurityUserId);
+                    cmd.Parameters.AddWithValue("UserLogin", model.UserLogin);
+                    cmd.Parameters.AddWithValue("UserPassword", model.UserPassword);
+                    cmd.Parameters.AddWithValue("SecurityUserStatus", userStatus);
+                    cmd.Parameters.AddWithValue("SecurityUserName", model.SecurityUserName.ToUpper());
+                    cmd.Parameters.AddWithValue("SecurityUserTypeId", model.SecurityUserTypeId);
+
+                    return Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
 
         public SecurityUserModel GetValidUser(string userLogin, string userPassword)
         {
             SecurityUserModel user = new SecurityUserModel();
 
-            SqlConnection conn = new SqlConnection(this.Configuration.GetConnectionString("connectionString"));
+            SqlConnection conn = new SqlConnection(this._configuration.GetConnectionString("connectionString"));
             SqlCommand cmd = new SqlCommand("SELECT dbo.SecurityUser.SecurityUserId, dbo.SecurityUser.UserLogin, dbo.SecurityUser.UserPassword, dbo.SecurityUser.SecurityUserName, dbo.SecurityUser.SecurityUserStatus, " +
             "dbo.SecurityUser.SecurityUserTypeId, dbo.ClinicConsulting.ClinicConsultingId, dbo.ClinicConsulting.ClinicConsultingName, dbo.ClinicConsulting.ClinicConsultingPhone, dbo.Clinic.ClinicId, dbo.Clinic.ClinicRif, " +
             "dbo.Clinic.ClinicName FROM dbo.Clinic INNER JOIN  dbo.ClinicConsulting ON dbo.Clinic.ClinicId = dbo.ClinicConsulting.ClinicId INNER JOIN " +
@@ -63,6 +90,107 @@ namespace Dentis.Core
             }           
 
             return user;
+        }
+
+        public IList<SecurityUserModel> GetUsers()
+        {
+            List<SecurityUserModel> users = new List<SecurityUserModel>();
+
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
+                {
+                    sqlConnection.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM SecurityUser Order By SecurityUserName", sqlConnection);
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+
+                        users.Add(new SecurityUserModel
+                        {
+                            SecurityUserId = (int)dr["SecurityUserId"],
+                            SecurityUserName = (string)dr["SecurityUserName"],
+                            UserPassword = (string)dr["UserPassword"],
+                            UserLogin = (string)dr["UserLogin"],
+                            SecurityUserStatus = (string)dr["SecurityUserStatus"],
+                            SecurityUserTypeId = (int)dr["SecurityUserTypeId"]
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return users.ToList();
+        }
+
+        public IList<SecurityUserModel> GetUserByUserId(int securityUserId)
+        {
+            List<SecurityUserModel> users = new List<SecurityUserModel>();
+
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
+                {
+                    sqlConnection.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM SecurityUser WHERE SecurityUserId = " + securityUserId, sqlConnection);
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+
+                        users.Add(new SecurityUserModel
+                        {
+                            SecurityUserId = (int)dr["SecurityUserId"],
+                            SecurityUserName = (string)dr["SecurityUserName"],
+                            UserPassword = (string)dr["UserPassword"],
+                            UserLogin = (string)dr["UserLogin"],
+                            SecurityUserStatus = (string)dr["SecurityUserStatus"],
+                            SecurityUserTypeId = (int)dr["SecurityUserTypeId"]
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return users.ToList();
+        }
+
+        public IList<SecurityUserModel> GetUserTypes()
+        {
+            List<SecurityUserModel> user = new List<SecurityUserModel>();
+
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
+                {
+                    sqlConnection.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT * FROM  dbo.SecurityUserType ORDER BY SecurityUserTypeId", sqlConnection);
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+
+                        user.Add(new SecurityUserModel
+                        {
+                            SecurityUserTypeId = (int)dr["SecurityUserTypeId"],
+                            SecurityUserTypeName = (string)dr["SecurityUserTypeName"]
+                        });
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return user.ToList();
         }
     }
 }

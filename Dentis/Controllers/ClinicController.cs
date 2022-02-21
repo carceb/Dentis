@@ -1,5 +1,6 @@
 ﻿using Dentis.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using static Dentis.Core.Interfaces;
 
 namespace Dentis.Controllers
@@ -30,7 +31,7 @@ namespace Dentis.Controllers
         {
             if (ModelState.IsValid)
             {
-                int clinicId = _clinic.SaveClinic(model);
+                int clinicId = _clinic.AddOrEdit(model);
                 if (clinicId != 0)
                 {
                     return RedirectToAction("Add", "ClinicConsulting", new { clinicIdSaved = clinicId });
@@ -38,6 +39,50 @@ namespace Dentis.Controllers
             }
 
             return RedirectToAction("Error", "Home");
+        }
+        public IActionResult Edit(int clinicId)
+        {
+            ClinicViewModel model = new ClinicViewModel();
+            var list = _clinic.GetClinicById(clinicId);
+
+            foreach (var item in list)
+            {
+                model.ClinicId = item.ClinicId;
+                model.ClinicName = item.ClinicName;
+                model.ClinicRif = item.ClinicRif;
+                model.ClinicAddress = item.ClinicAddress;
+                model.ClinicEmail = item.ClinicEmail;
+                model.ClinicPhoneNumber = item.ClinicPhoneNumber;
+                model.WebPage = item.WebPage;
+                model.ClinicStatus = item.ClinicStatus;
+            }
+
+            ViewBag.Status = new SelectList(GetClinicStatus());
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ClinicViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                int clinicId = _clinic.AddOrEdit(model);
+
+                return RedirectToAction("Index", "Setting");
+            }
+
+            return RedirectToAction("Error", "Home");
+        }
+
+        private List<string> GetClinicStatus()
+        {
+            List<string> status = new List<string>();
+
+            status.Add("0");
+            status.Add("1");
+
+            return status;
         }
     }
 }

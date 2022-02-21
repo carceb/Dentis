@@ -38,39 +38,34 @@
 						<section>
 							<div class="box alt">
 								<div class="row gtr-uniform">
-									<div class="col-12"><span class="image fit"><img src="images/limpiezadental-copia.png" alt="" /></span></div>
+									<div class="col-12"><span class="image fit"><img src="images/settings-banner.png" alt="" /></span></div>
 								</div>
 							</div>
 						</section>
-						<section>
-                            <h2>Indique el usuario y la clave</h2>
-								<div class="row gtr-uniform">
-									<div class="col-12">
-                                      @Html.TextBoxFor(x => x.UserLogin, new { placeholder = "Nombre de usuario"})
-                                       <span asp-validation-for="UserLogin" class="text-danger"></span>
-									</div>
-									<div class="col-12">
-                                      @Html.PasswordFor(x => x.UserPassword, new { placeholder = "Clave"})
-                                      <span asp-validation-for="UserPassword" class="text-danger"></span>
-									</div>
-									<div class="col-12">
-										<ul class="actions">
-                                            <li><input type="submit" value="Entrar" class="primary" /></li>
-										</ul>
-									</div>
-								</div>
-						</section>
 						<br/>
-						<section>
-							<h2>Siganos</h2>
-							<ul class="icons">
-								<li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
-								<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Teléfono</span></a></li>
-								<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
-							</ul>
-						</section>
+								<section>
+									<h2>Ajustes Generales</h2>
+									<div class="row">
+										<div class="col-6 col-12-medium">
+											<h3>Cliníca y Consultorio</h3>
+											<ul>
+												<li>@Html.ActionLink("Agregar Cliníca","Add","Clinic")</li>
+												<li>@Html.ActionLink("Modificar Cliníca","SelectClinic","Setting")</li>
+												<li>@Html.ActionLink("Agregar Consultorio","AddNewConsulting","ClinicConsulting")</li>
+												<li>Modificar Consultorio</li>
+											</ul>
+										</div>
+										<div class="col-6 col-12-medium">
+											<h3>Seguridad</h3>
+											<ul>
+												<li>Cambiar Password</li>
+												<li>@Html.ActionLink("Agregar Usuario","Add","User")</li>
+												<li>@Html.ActionLink("Modificar Usuario","SelectUser","Setting")</li>
+											</ul>
+										</div>
+									</div>
+								</section>
+
 				</div>
 			</div>
 

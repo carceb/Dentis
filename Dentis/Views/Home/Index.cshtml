@@ -66,12 +66,17 @@
 									</span>
 										@Html.ActionLink("Realizar presupuesto","SelectClient","Client")
 								</article>
-@*								<article class="style4">
-									<span class="image">
-										<img src="images/settings.jpg" alt="" />
-									</span>	
-								@Html.ActionLink("Haga clic aquí para entrar los ajustes genrales","Add","Clinic")
-								</article>*@
+								@{
+									if(ViewBag.IsSuperUser)
+									{
+										<article class="style4">
+											<span class="image">
+												<img src="images/settings.jpg" alt="" />
+											</span>	
+										@Html.ActionLink("Haga clic aquí para entrar los ajustes generales","Index","Setting")
+										</article>
+									}
+								}
 							</section>
 						</div>
 					</div>

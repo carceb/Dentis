@@ -65,7 +65,7 @@ namespace Dentis.Controllers
             {
                 var list = JsonExtensions.FromDelimitedJson<BudgetViweModel>(new StringReader(customers.Replace("[", string.Empty).Replace("]", string.Empty))).ToList();
 
-                budgetId = _budget.SaveBudget(list);
+                budgetId = _budget.AddOrEdit(list);
             }
 
             return Json(budgetId);

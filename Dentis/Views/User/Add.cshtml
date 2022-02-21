@@ -1,4 +1,4 @@
-﻿@model Dentis.Models.ClientViewModel
+﻿@model Dentis.Models.SecurityUserModel
 @{
 	Layout = "";    
 }
@@ -12,7 +12,7 @@
 		<noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
-	@using(Html.BeginForm("Add", "Client", FormMethod.Post))
+	@using(Html.BeginForm("Add", "User", FormMethod.Post))
 	{
 		<!-- Wrapper -->
 		<div id="wrapper">
@@ -40,10 +40,7 @@
 			  <nav id="menu">
 				<h2>Menu</h2>
 				<ul>
-				  <li>@Html.ActionLink("Seleccionar cliente", "SelectClient", "Client")</li>
-				  <li>@Html.ActionLink("Registrar paciente", "Add", "PatientRegistration")</li>
-				  <li>@Html.ActionLink("Pacientes en cola", "Index", "Queue")</li>
-				  <li>@Html.ActionLink("Seleccionar consultorio", "Index", "ConsultingSelection")</li>
+				  <li>@Html.ActionLink("Ajustes", "Index", "Setting")</li>
 				  <li>@Html.ActionLink("Salir", "Index", "Login")</li>
 				</ul>
 			  </nav> 
@@ -53,44 +50,33 @@
 				<div class="inner">
 					<!-- Form -->
 						<section>
-							<h5>Agregar cliente</h5>
+							<h5>Agregar usuario</h5>
 							<br/>
 							<br/>
 								<div class="row gtr-uniform">
 									<div class="col-6 col-12-xsmall">
-										<strong>Cédula:</strong>
-										@Html.TextBoxFor(x => x.IdentificationNumber, new { placeholder = "Cédula", tabindex = "0", maxlength = "12" })
-										<span asp-validation-for="IdentificationNumber" class="text-danger"></span>
-									</div>
-									<div class="col-6 col-12-xsmall">
 										<strong>Nombre:</strong>
-										@Html.TextBoxFor(x => x.ClientName, new { placeholder = "Nombre"})
-										<span asp-validation-for="ClientName" class="text-danger"></span>
-									</div>
-									<div class="col-12">
-										<strong>Genero:</strong>
-										@Html.DropDownListFor(t => t.Gender, (SelectList)ViewBag.PatientGender, "-- Seleccione genero --")
+										@Html.HiddenFor(x => x.SecurityUserId)
+										@Html.TextBoxFor(x => x.SecurityUserName, new { placeholder = "Nombre", tabindex = "0" })
+										<span asp-validation-for="SecurityUserName" class="text-danger"></span>
 									</div>
 									<div class="col-6 col-12-xsmall">
-										<strong>Fecha de nacimiento:</strong>
-										@Html.TextBoxFor(m => m.BirthDate, new { @class = "getdate", placeholder = "Fecha de nacimiento", @readonly = true })
-										<span asp-validation-for="BirthDate" class="text-danger"></span>
+										<strong>Login:</strong>
+										@Html.TextBoxFor(x => x.UserLogin, new { placeholder = "Login"})
+										<span asp-validation-for="UserLogin" class="text-danger"></span>
 									</div>
 									<div class="col-6 col-12-xsmall">
-										<strong>Teléfono:</strong>
-										@Html.TextBoxFor(x => x.ClientCellPhone, new { placeholder = "Número de Teléfono"})
+										<strong>Password:</strong>
+										@Html.TextBoxFor(x => x.UserPassword, new { placeholder = "Password"})
 									</div>
-									<div class="col-12">
-										<strong>Email:</strong>
-										@Html.TextBoxFor(x => x.ClientEmail, new { placeholder = "Email"})
-									</div>
-									<div class="col-12">
-										<strong>Dirección:</strong>
-										@Html.TextAreaFor(x => x.ClientAddress, new { placeholder = "Dirección"})
+									<div class="col-6 col-12-xsmall">
+										<strong>Tipo:</strong>
+										@Html.DropDownListFor(t => t.SecurityUserTypeId, (SelectList)ViewBag.UserType, "-- Seleccione tipo de usuario --")
 									</div>
 									<div class="col-12">
 										<ul class="actions">
 										<li><input type="submit" value="Actualizar" class="primary" /></li>
+										</ul>
 									</div>
 								</div>
 						</section>
@@ -112,15 +98,7 @@
 			<script src="~/assets/js/main.js"></script>
 			<link rel="stylesheet" href="~/lib/bootstrap/dist/css/4.1.0/bootstrap-datepicker.min.css" />
 			<link rel="stylesheet" href="~/lib/bootstrap/dist/css/4.1.0/bootstrap.min.css" />
-			<script src="~/lib/bootstrap/dist/js/bootstrap-datepicker.min.js"></script>
-			  @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-			<script>
-			  $(document).ready(function () {
-				$(".getdate").each(function () {
-				  $(this).datepicker({ format: 'dd/mm/yyyy' });
-				});
-			  });
-			</script>
+			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 	</body>
 </html>
 

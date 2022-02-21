@@ -47,7 +47,7 @@ namespace Dentis.Controllers
                         patientViewModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
                     }
 
-                    if (_patient.SavePatient(patientViewModel))
+                    if (_patient.AddOrEdit(patientViewModel))
                     {
                         return RedirectToAction(nameof(Add));
                     }

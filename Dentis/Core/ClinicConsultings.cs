@@ -187,7 +187,7 @@ namespace Dentis.Core
             return clinic.ToList();
         }
 
-        public int SaveClinicConsulting(ClinicConsultingViewModel model)
+        public int AddOrEdit(ClinicConsultingViewModel model)
         {
             try
             {

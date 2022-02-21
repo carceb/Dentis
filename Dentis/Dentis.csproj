@@ -16,4 +16,8 @@
     <Folder Include="wwwroot\lib\bootstrap\dist\css\4.1.0\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
 </Project>

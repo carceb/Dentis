@@ -14,13 +14,22 @@ namespace Dentis.Controllers
             this._client = client;
         }
 
-        public IActionResult SelectClient()
+        public IActionResult SelectClient(string budgetType = "PrintBudget")
         {
             if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
-                ClientViewModel clientViewModel = new ClientViewModel();
-                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                return View(clientViewModel);
+                if (budgetType == "PrintBudget")
+                {
+                    ClientViewModel clientViewModel = new ClientViewModel();
+                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                    return View(clientViewModel);
+                }
+                else
+                {
+                    ClientViewModel clientViewModel = new ClientViewModel();
+                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                    return View(clientViewModel);
+                }
             }
             else
             {
@@ -75,7 +84,7 @@ namespace Dentis.Controllers
             if (HttpContext.Session.GetString("SecurityUserId") != null)
             {
                 ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                _client.SaveClient(model);
+                _client.AddOrEdit(model);
                 return RedirectToAction("SelectClient");
             }
             else
@@ -106,7 +115,7 @@ namespace Dentis.Controllers
         {
             if (ModelState.IsValid)
             {
-                int clientId = _client.SaveClient(clientViewModel);
+                int clientId = _client.AddOrEdit(clientViewModel);
                 if (clientId > 0)
                 {
                     return RedirectToAction("Index", "Budget", new { clientId = clientId });

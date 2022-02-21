@@ -17,12 +17,7 @@ namespace Dentis.Controllers
 
         public IActionResult Add(int clinicIdSaved)
         {
-            ClinicConsultingViewModel model = new ClinicConsultingViewModel();
-            model.ClinicId = clinicIdSaved;
-
-            ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
-
-            return View(model);
+            return RedirectToAction("AddNewConsulting");
         }
 
         [HttpPost()]
@@ -30,12 +25,12 @@ namespace Dentis.Controllers
         {
             if (ModelState.IsValid)
             {                    
-                int clinicConsultingId = _clinicConsulting.SaveClinicConsulting(model);
+                int clinicConsultingId = _clinicConsulting.AddOrEdit(model);
                 ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
 
                 if (clinicConsultingId != 0)
                 {
-                    if (!IsSuperUser())
+                    if (!Utils.Utils.IsSuperUser((int)HttpContext.Session.GetInt32("SecurityUserTypeId")))
                     {
                         return RedirectToAction("Add", new { clinicIdSaved = model.ClinicId });
                     }
@@ -55,19 +50,6 @@ namespace Dentis.Controllers
             ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
 
             return View(model);
-        }
-
-        private bool IsSuperUser()
-        {
-            if (HttpContext.Session.GetString("SecurityUserTypeId") != null)
-            {
-                if (HttpContext.Session.GetInt32("SecurityUserTypeId") == 1)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

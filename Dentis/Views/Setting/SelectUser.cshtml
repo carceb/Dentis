@@ -1,0 +1,84 @@
+﻿@model Dentis.Models.SecurityUserModel
+@{
+  Layout = "";    
+}
+<!DOCTYPE HTML>
+<html>
+      <head>
+        <title>Dentis</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="~/assets/css/main.css" />
+        <noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
+      </head>
+	<body class="is-preload">
+    @using(Html.BeginForm("SelectUser", "Setting", FormMethod.Post))
+	{
+		<!-- Wrapper -->
+		<div id="wrapper">
+
+        <!-- Header -->
+          <header id="header">
+            <div class="inner">
+
+              <!-- Logo -->
+                <a href="index.html" class="logo">
+                  <span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+                  <br />
+                  <span class="title">@ViewBag.ConsultingName</span>
+                </a>
+            </div>
+            <!-- Nav -->
+              <nav>
+                <ul>
+                  <li><a href="#menu">Menu</a></li>
+                </ul>
+              </nav>
+          </header>
+
+        <!-- Menu -->
+          <nav id="menu">
+            <h2>Menu</h2>
+            <ul>
+              <li>@Html.ActionLink("Ajustes", "Index", "Setting")</li>
+              <li>@Html.ActionLink("Salir", "Index", "Login")</li>
+            </ul>
+          </nav>
+
+			<div id="main">
+				<div class="inner">
+					<!-- Form -->
+						<section>
+                            <h2>Seleccione el usuario</h2>
+								<div class="row gtr-uniform">
+									<div class="col-6 col-12-xsmall">
+                                        <strong>Usuario:</strong>
+                                        @Html.DropDownListFor(t => t.SecurityUserId, (SelectList)ViewBag.User, "-- Seleccione el usuario --")
+                                        <span asp-validation-for="SecurityUserId" class="text-danger"></span>
+									</div>
+									<div class="col-12">
+										<ul class="actions">
+                                           <li><input type="submit" value="Buscar" class="primary" /></li>
+										</ul>
+									</div>
+								</div>
+						</section>
+				</div>
+			</div>
+
+			<!-- Footer -->
+				<footer id="footer">
+					<div class="inner">
+					</div>
+				</footer>
+		</div>	
+	}
+    <!-- Scripts -->
+      <script src="~/assets/js/jquery.min.js"></script>
+      <script src="~/assets/js/browser.min.js"></script>
+      <script src="~/assets/js/breakpoints.min.js"></script>
+      <script src="~/assets/js/util.js"></script>
+      <script src="~/assets/js/main.js"></script>
+      @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	</body>
+</html>

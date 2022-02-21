@@ -12,6 +12,32 @@ namespace Dentis.Core
             this._configuration = configuration;
         }
 
+        public bool AddOrEdit(PatientViewModel model)
+        {
+            try
+            {
+                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
+                {
+                    sqlConnection.Open();
+                    SqlCommand cmd = new SqlCommand("PatientAddOrEdit", sqlConnection);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("PatientId", model.PatientId);
+                    cmd.Parameters.AddWithValue("PatientName", model.PatientName.ToUpper());
+                    cmd.Parameters.AddWithValue("PatientAge", model.PatientAge);
+                    cmd.Parameters.AddWithValue("PatientGender", model.PatientGender);
+                    cmd.Parameters.AddWithValue("AppointmentReasonId", model.AppointmentReasonId);
+                    cmd.Parameters.AddWithValue("ClinicConsultingId", model.ClinicConsultingId);
+                    cmd.ExecuteNonQuery();
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public List<Patient> GetPatients() 
         {
             List<Patient> patient = new List<Patient>();
@@ -48,32 +74,6 @@ namespace Dentis.Core
             }          
             
             return patient;
-        }
-
-        public bool SavePatient(PatientViewModel model)
-        {
-            try
-            {
-                using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
-                {
-                    sqlConnection.Open();
-                    SqlCommand cmd = new SqlCommand("PatientAddOrEdit", sqlConnection);
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("PatientId", model.PatientId);
-                    cmd.Parameters.AddWithValue("PatientName", model.PatientName);
-                    cmd.Parameters.AddWithValue("PatientAge", model.PatientAge);
-                    cmd.Parameters.AddWithValue("PatientGender", model.PatientGender);
-                    cmd.Parameters.AddWithValue("AppointmentReasonId", model.AppointmentReasonId);
-                    cmd.Parameters.AddWithValue("ClinicConsultingId", model.ClinicConsultingId);
-                    cmd.ExecuteNonQuery();
-
-                    return true;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
     }
 }

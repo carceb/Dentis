@@ -7,19 +7,19 @@ namespace Dentis.Core
         public interface IPatient
         {
             public List<Patient> GetPatients();
-            public bool SavePatient(PatientViewModel model);            
+            public bool AddOrEdit(PatientViewModel model);            
         }
 
         public interface IClient
         {
-            public int SaveClient(ClientViewModel model);
+            public int AddOrEdit(ClientViewModel model);
             public IList<ClientViewModel> GetClientById(int clientId);
             public IList<ClientViewModel> GetClientByIdentificationNumber(double? idNumber);
         }
 
         public interface IBudget
         {
-            public int SaveBudget(List<BudgetViweModel> model);
+            public int AddOrEdit(List<BudgetViweModel> model);
             public IList<BudgetViweModel> GetBudgetDetailByBudgetIdAndClinicConsultingId(int budgetId, int clinicConsultingId);
             public IList<BudgetViweModel> GetBudgetDetailByClientIdAndClinicConsultingId(int clientId, int clinicConsultingId);
             public IList<BudgetViweModel> GetQuadrants();
@@ -36,7 +36,11 @@ namespace Dentis.Core
 
         public interface ISecurity
         {
+            public int AddOrEdit(SecurityUserModel model);
+            public IList<SecurityUserModel> GetUserTypes();
             public SecurityUserModel GetValidUser(string userLogin, string userPassword);
+            public IList<SecurityUserModel> GetUsers();
+            public IList<SecurityUserModel> GetUserByUserId(int securityUserId);
         }
 
         public interface IAppointmentReason
@@ -45,14 +49,14 @@ namespace Dentis.Core
         }
         public interface IClinic
         {
-            public int SaveClinic(ClinicViewModel model);
+            public int AddOrEdit(ClinicViewModel model);
             public IList<ClinicViewModel> GetClinics();
             public IList<ClinicViewModel> GetClinicByUserId(int userId);
             public IList<ClinicViewModel> GetClinicById(int clinicId);
         }
         public interface IClinicConsulting
         {
-            public int SaveClinicConsulting(ClinicConsultingViewModel model);
+            public int AddOrEdit(ClinicConsultingViewModel model);
             public IList<ClinicConsultingViewModel> GetClinicConsultingUserByUserId(int userId);
             public IList<ClinicConsultingViewModel> GetClinicConsultings();
             public IList<ClinicConsultingViewModel> GetClinicConsultingsByClinicId(int clinicId);

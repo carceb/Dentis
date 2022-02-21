@@ -12,7 +12,7 @@ namespace Dentis.Core
             this._configuration = configuration;
         }
 
-        public int SaveClient(ClientViewModel model)
+        public int AddOrEdit(ClientViewModel model)
         {
             try
             {
@@ -27,10 +27,10 @@ namespace Dentis.Core
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("ClientId", model.ClientId);
                     cmd.Parameters.AddWithValue("IdentificationNumber", model.IdentificationNumber);
-                    cmd.Parameters.AddWithValue("ClientName", model.ClientName);
+                    cmd.Parameters.AddWithValue("ClientName", model.ClientName.ToUpper());
                     cmd.Parameters.AddWithValue("Gender", model.Gender);
                     cmd.Parameters.AddWithValue("BirthDate", dateTimeBirthDate);
-                    cmd.Parameters.AddWithValue("ClientAddress", (!string.IsNullOrEmpty(model.ClientAddress) ? model.ClientAddress : "N/D"));
+                    cmd.Parameters.AddWithValue("ClientAddress", (!string.IsNullOrEmpty(model.ClientAddress) ? model.ClientAddress.ToUpper() : "N/D"));
                     cmd.Parameters.AddWithValue("ClientCellPhone",  (!string.IsNullOrEmpty(model.ClientCellPhone) ? model.ClientCellPhone : "N/D"));
                     cmd.Parameters.AddWithValue("ClientEmail", (!string.IsNullOrEmpty(model.ClientEmail) ? model.ClientEmail : "N/D"));
 

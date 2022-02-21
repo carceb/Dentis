@@ -11,7 +11,7 @@ namespace Dentis.Core
         {
             this._configuration = configuration;
         }
-        public int SaveBudget(List<BudgetViweModel> model)
+        public int AddOrEdit(List<BudgetViweModel> model)
         {
             int result = 0;
             try
@@ -44,7 +44,7 @@ namespace Dentis.Core
                         cmd.Parameters.AddWithValue("BudgetDetailId", item.BudgetDetailId);
                         cmd.Parameters.AddWithValue("QuadrantToothId", item.QuadrantToothId);
                         cmd.Parameters.AddWithValue("ProcedureId", item.ProcedureId);
-                        cmd.Parameters.AddWithValue("Observation", item.Observation);
+                        cmd.Parameters.AddWithValue("Observation", item.Observation.ToUpper());
                         cmd.Parameters.AddWithValue("Cost", item.Cost);
                         cmd.ExecuteScalar();
                         cmd.Parameters.Clear();

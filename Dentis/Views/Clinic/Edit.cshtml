@@ -1,0 +1,90 @@
+﻿@model Dentis.Models.ClinicViewModel
+@{
+	Layout = "";    
+}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Dentis</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="~/assets/css/main.css" />
+		<noscript><link rel="stylesheet" href= "~/assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+	@using(Html.BeginForm("Edit", "Clinic", FormMethod.Post))
+	{
+	<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="index.html" class="logo">
+									<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+								</a>
+
+						</div>
+					</header>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<section>
+								<h2>Indique los datos de la Clinica</h2>
+
+									<div class="fields">
+										<div class="field half">
+											@Html.HiddenFor(x => x.ClinicId)
+											@Html.TextBoxFor(x => x.ClinicName, new { placeholder = "Nombre de la clinica"})
+											 <span asp-validation-for="ClinicName" class="text-danger"></span>
+										</div>
+										<div class="field half">
+											@Html.TextBoxFor(x => x.ClinicRif, new { placeholder = "RIF"})
+											 <span asp-validation-for="ClinicRif" class="text-danger"></span>
+										</div>
+										<div class="field half">
+											@Html.TextBoxFor(x => x.ClinicAddress, new { placeholder = "Dirección"})
+											 <span asp-validation-for="ClinicAddress" class="text-danger"></span>
+										</div>
+										<div class="field half">
+											@Html.TextBoxFor(x => x.ClinicEmail, new { placeholder = "Email"})
+											 <span asp-validation-for="ClinicEmail" class="text-danger"></span>
+										</div>
+										<div class="field half">
+											@Html.TextBoxFor(x => x.ClinicPhoneNumber, new { placeholder = "Número de telefono"})
+											 <span asp-validation-for="ClinicPhoneNumber" class="text-danger"></span>
+										</div>
+										<div class="field half">
+											@Html.TextBoxFor(x => x.WebPage, new { placeholder = "Pagina Web"})
+										</div>
+										<div class="field half">
+											  <strong>Genero:</strong>
+											  @Html.DropDownListFor(t => t.ClinicStatus, (SelectList)ViewBag.Status)
+										</div>
+									</div>
+									<br>
+									<ul class="actions">
+										<li><input type="submit" value="Actualizar" class="primary" /></li>
+									</ul>
+								</section>
+							<ul class="copyright">
+
+							</ul>
+						</div>
+					</footer>
+			</div>	
+	}
+
+		<!-- Scripts -->
+			<script src="~/assets/js/jquery.min.js"></script>
+			<script src="~/assets/js/browser.min.js"></script>
+			<script src="~/assets/js/breakpoints.min.js"></script>
+			<script src="~/assets/js/util.js"></script>
+			<script src="~/assets/js/main.js"></script>
+			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	</body>
+</html>
+

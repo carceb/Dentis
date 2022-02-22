@@ -198,7 +198,7 @@ namespace Dentis.Core
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("ClinicConsultingId", model.ClinicConsultingId);
                     cmd.Parameters.AddWithValue("ClinicId", model.ClinicId);
-                    cmd.Parameters.AddWithValue("ClinicConsultingName", model.ClinicConsultingName);
+                    cmd.Parameters.AddWithValue("ClinicConsultingName", model.ClinicConsultingName.ToUpper());
                     cmd.Parameters.AddWithValue("ClinicConsultingPhone", (!string.IsNullOrEmpty(model.ClinicConsultingPhone) ? model.ClinicConsultingPhone : "N/D"));
 
                     return Convert.ToInt32(cmd.ExecuteScalar());

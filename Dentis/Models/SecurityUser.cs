@@ -27,5 +27,6 @@ namespace Dentis.Models
         public int ClinicId { get; set; }
 
         public string? ClinicName { get; set; }
+        public string? ClinicConsultingName { get; set; }
     }
 }

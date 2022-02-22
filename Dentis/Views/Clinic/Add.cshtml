@@ -18,16 +18,32 @@
 			<div id="wrapper">
 
 				<!-- Header -->
-					<header id="header">
-						<div class="inner">
+				<header id="header">
+					<div class="inner">
 
-							<!-- Logo -->
-								<a href="index.html" class="logo">
-									<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
-								</a>
+						<!-- Logo -->
+							<a href="index.html" class="logo">
+								<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+							</a>
+					</div>
 
-						</div>
-					</header>
+				<!-- Nav -->
+					<nav>
+						<ul>
+							<li><a href="#menu">Menu</a></li>
+						</ul>
+					</nav>
+				</header>
+
+			<!-- Menu -->
+			  <nav id="menu">
+				<h2>Menu</h2>
+				<ul>
+				  <li>@Html.ActionLink("Modificar Cliníca","SelectClinic","Setting")</li>
+				  <li>@Html.ActionLink("Ajustes", "Index", "Setting")</li>
+				  <li>@Html.ActionLink("Salir", "Index", "Login")</li>
+				</ul>
+			  </nav> 
 
 				<!-- Footer -->
 					<footer id="footer">
@@ -37,33 +53,38 @@
 
 									<div class="fields">
 										<div class="field half">
+											<strong>Nombre:</strong>
 											@Html.TextBoxFor(x => x.ClinicName, new { placeholder = "Nombre de la clinica"})
 											 <span asp-validation-for="ClinicName" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Rif:</strong>
 											@Html.TextBoxFor(x => x.ClinicRif, new { placeholder = "RIF"})
 											 <span asp-validation-for="ClinicRif" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Dirección:</strong>
 											@Html.TextBoxFor(x => x.ClinicAddress, new { placeholder = "Dirección"})
 											 <span asp-validation-for="ClinicAddress" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Email:</strong>
 											@Html.TextBoxFor(x => x.ClinicEmail, new { placeholder = "Email"})
 											 <span asp-validation-for="ClinicEmail" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Telefono:</strong>
 											@Html.TextBoxFor(x => x.ClinicPhoneNumber, new { placeholder = "Número de telefono"})
 											 <span asp-validation-for="ClinicPhoneNumber" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Web:</strong>
 											@Html.TextBoxFor(x => x.WebPage, new { placeholder = "Pagina Web"})
 										</div>
 									</div>
 									<br>
 									<ul class="actions">
 										<li><input type="submit" value="Actualizar" class="primary" /></li>
-										<li><input type="button" value="Agregar consultorio" class="primary"  onclick="location.href='@Url.Action("AddNewConsulting", "ClinicConsulting")'" /></li>
 									</ul>
 								</section>
 							<ul class="copyright">

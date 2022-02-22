@@ -149,9 +149,9 @@ namespace Dentis.Core
                     SqlCommand cmd = new SqlCommand("ClinicAddOrEdit", sqlConnection);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("ClinicId", model.ClinicId);
-                    cmd.Parameters.AddWithValue("ClinicName", model.ClinicName);
-                    cmd.Parameters.AddWithValue("ClinicRif", model.ClinicRif);
-                    cmd.Parameters.AddWithValue("ClinicAddress", model.ClinicAddress);
+                    cmd.Parameters.AddWithValue("ClinicName", model.ClinicName.ToUpper());
+                    cmd.Parameters.AddWithValue("ClinicRif", model.ClinicRif.ToUpper());
+                    cmd.Parameters.AddWithValue("ClinicAddress", model.ClinicAddress.ToUpper());
                     cmd.Parameters.AddWithValue("ClinicPhoneNumber", model.ClinicPhoneNumber);
                     cmd.Parameters.AddWithValue("WebPage", (!string.IsNullOrEmpty(model.WebPage) ? model.WebPage : "N/D"));
                     cmd.Parameters.AddWithValue("ClinicStatus", (!string.IsNullOrEmpty(model.ClinicStatus) ? model.ClinicStatus : "1"));

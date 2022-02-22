@@ -30,7 +30,23 @@
               }
                  <h2 style="color:#4cbece">Sistema de atención odontólogica</h2>
             </div>
+
+		<!-- Nav -->
+			<nav>
+				<ul>
+					<li><a href="#menu">Menu</a></li>
+				</ul>
+			</nav>
           </header>
+
+			<!-- Menu -->
+			  <nav id="menu">
+				<h2>Menu</h2>
+				<ul>
+				  <li>@Html.ActionLink("Home","Index","Home")</li>
+				  <li>@Html.ActionLink("Salir", "Index", "Login")</li>
+				</ul>
+			  </nav> 
 
 			<div id="main">
 				<div class="inner">

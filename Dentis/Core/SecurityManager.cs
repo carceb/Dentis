@@ -29,6 +29,7 @@ namespace Dentis.Core
                     cmd.Parameters.AddWithValue("SecurityUserStatus", userStatus);
                     cmd.Parameters.AddWithValue("SecurityUserName", model.SecurityUserName.ToUpper());
                     cmd.Parameters.AddWithValue("SecurityUserTypeId", model.SecurityUserTypeId);
+                    cmd.Parameters.AddWithValue("ClinicConsultingId", model.ClinicConsultingId);
 
                     return Convert.ToInt32(cmd.ExecuteScalar());
                 }

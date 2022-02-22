@@ -18,16 +18,22 @@ namespace Dentis.Models
     {
         [Key]
         public int ClinicId { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Debe colocar el RIF")]
         public string? ClinicRif { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Debe colocar el nombre de la clinica")]
         public string? ClinicName { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Debe colocar la dirección")]
         public string? ClinicAddress { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Debe colocar el telefono")]
         public string? ClinicPhoneNumber { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Debe colocar el email")]
         public string? ClinicEmail { get; set; }
+
         public string? WebPage { get; set; }
         public string? ClinicStatus { get; set; }
     }

@@ -17,17 +17,33 @@
 	<!-- Wrapper -->
 			<div id="wrapper">
 
-				<!-- Header -->
-					<header id="header">
-						<div class="inner">
+			<!-- Header -->
+				<header id="header">
+					<div class="inner">
+						<!-- Logo -->
+							<a href="index.html" class="logo">
+								<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
+							</a>
 
-							<!-- Logo -->
-								<a href="index.html" class="logo">
-									<span class="symbol"><img src="~/images/logo.svg" alt="" /></span><span class="title">Dentis</span>
-								</a>
+					</div>
 
-						</div>
-					</header>
+				<!-- Nav -->
+					<nav>
+						<ul>
+							<li><a href="#menu">Menu</a></li>
+						</ul>
+					</nav>
+			</header>
+
+			<!-- Menu -->
+			  <nav id="menu">
+				<h2>Menu</h2>
+				<ul>
+				  <li>@Html.ActionLink("Agregar Cliníca","Add","Clinic")</li>
+				  <li>@Html.ActionLink("Ajustes", "Index", "Setting")</li>
+				  <li>@Html.ActionLink("Salir", "Index", "Login")</li>
+				</ul>
+			  </nav> 
 
 				<!-- Footer -->
 					<footer id="footer">
@@ -36,24 +52,26 @@
 								<h2>Indique los datos del Consultorio</h2>
 									<div class="fields">
 										<div class="field half">
+											<strong>Clínica:</strong>
 											@Html.DropDownListFor(t => t.ClinicId, (SelectList)ViewBag.Clinic, "-- Seleccione la Clínica --")
 										</div>
 										<div class="field half">
+											<strong>Nombre Consultorio:</strong>
 											@Html.TextBoxFor(x => x.ClinicConsultingName, new { placeholder = "Nombre del Consultorio"})
 											 <span asp-validation-for="ClinicConsultingName" class="text-danger"></span>
 										</div>
 										<div class="field half">
+											<strong>Teléfono:</strong>
 											@Html.TextBoxFor(x => x.ClinicConsultingPhone, new { placeholder = "Telefonos"})
 										</div>
 									</div>
 									<br>
 									<ul class="actions">
 										<li><input type="submit" value="Actualizar" class="primary" /></li>
-										<li><input type="button" value="Pacientes en cola" class="primary"  onclick="location.href='@Url.Action("Index", "Queue")'" /></li>
 									</ul>
 								</section>
 							<ul class="copyright">
-								<li>&copy; Untitled. All rights reserved</li><li>Design: Carlos Ceballos</li>
+								<li>&copy; Untitled. All rights reserved</li>
 							</ul>
 						</div>
 					</footer>

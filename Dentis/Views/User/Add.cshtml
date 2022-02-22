@@ -50,7 +50,7 @@
 				<div class="inner">
 					<!-- Form -->
 						<section>
-							<h5>Agregar usuario</h5>
+							<h2>Agregar usuario</h2>
 							<br/>
 							<br/>
 								<div class="row gtr-uniform">
@@ -72,6 +72,16 @@
 									<div class="col-6 col-12-xsmall">
 										<strong>Tipo:</strong>
 										@Html.DropDownListFor(t => t.SecurityUserTypeId, (SelectList)ViewBag.UserType, "-- Seleccione tipo de usuario --")
+									</div>
+									<div class="col-6 col-12-xsmall">
+										<strong>Clínica:</strong>
+										@Html.DropDownListFor(t => t.ClinicId, (SelectList)@ViewBag.Clinic)
+									</div>
+									<div class="col-6 col-12-xsmall">
+										<strong>Consultorio:</strong>
+										@Html.TextBoxFor(m => m.ClinicConsultingName, new { style = "display: none;" })
+										@Html.DropDownListFor(t => t.ClinicConsultingId , (SelectList)ViewBag.ClinicConsulting, "-- Seleccione el consultorio --")
+										<span asp-validation-for="ClinicConsultingId" class="text-danger"></span>
 									</div>
 									<div class="col-12">
 										<ul class="actions">
@@ -96,9 +106,36 @@
 			<script src="~/assets/js/breakpoints.min.js"></script>
 			<script src="~/assets/js/util.js"></script>
 			<script src="~/assets/js/main.js"></script>
-			<link rel="stylesheet" href="~/lib/bootstrap/dist/css/4.1.0/bootstrap-datepicker.min.css" />
-			<link rel="stylesheet" href="~/lib/bootstrap/dist/css/4.1.0/bootstrap.min.css" />
 			@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+		  <script src="~/assets/js/jquery.min.js" type="text/javascript"></script>  
+		  <script type="text/javascript">  
+			$(document).ready(function () {  
+			  $("#ClinicId").change(function () {  
+				$("#ClinicConsultingId").empty();  
+				$.ajax({  
+				  type: 'POST',  
+				  url: '@Url.Action("GetClinicCOnsultings")',
+       
+				  dataType: 'json',  
+       
+				  data: { clinicId: $("#ClinicId").val() },   
+       
+				  success: function (clinicConsultings) {  
+       
+					$.each(clinicConsultings, function (i, clinicConsulting) {  
+					$("#ClinicConsultingId").append('<option value="' + clinicConsulting.value + '">' +    
+					   clinicConsulting.text + '</option>');                                                                                                  
+      
+					});  
+				  },  
+				  error: function (ex) {  
+					alert('No se pudieron obtener los consultorios.' + ex);  
+				  }  
+				});  
+				return false;  
+			  })  
+			});  
+		  </script>  
 	</body>
 </html>
 

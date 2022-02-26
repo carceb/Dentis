@@ -137,7 +137,9 @@ namespace Dentis.Core
                 using (SqlConnection sqlConnection = new SqlConnection(_configuration.GetConnectionString("connectionString")))
                 {
                     sqlConnection.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT * FROM SecurityUser WHERE SecurityUserId = " + securityUserId, sqlConnection);
+                    SqlCommand cmd = new SqlCommand("SELECT  dbo.SecurityUser.SecurityUserId, dbo.SecurityUser.UserLogin, dbo.SecurityUser.UserPassword, dbo.SecurityUser.SecurityUserName, dbo.SecurityUser.SecurityUserStatus, dbo.SecurityUser.SecurityUserTypeId, dbo.SecurityClinicConsulting.ClinicConsultingId,dbo.ClinicConsulting.ClinicId " +
+                        " FROM dbo.SecurityUser INNER JOIN  dbo.SecurityClinicConsulting ON dbo.SecurityUser.SecurityUserId = dbo.SecurityClinicConsulting.SecurityUserId INNER JOIN dbo.ClinicConsulting ON dbo.SecurityClinicConsulting.ClinicConsultingId = dbo.ClinicConsulting.ClinicConsultingId " +
+                        "WHERE dbo.SecurityUser.SecurityUserId = " + securityUserId, sqlConnection);
                     SqlDataReader dr = cmd.ExecuteReader();
 
                     while (dr.Read())
@@ -150,7 +152,9 @@ namespace Dentis.Core
                             UserPassword = (string)dr["UserPassword"],
                             UserLogin = (string)dr["UserLogin"],
                             SecurityUserStatus = (string)dr["SecurityUserStatus"],
-                            SecurityUserTypeId = (int)dr["SecurityUserTypeId"]
+                            SecurityUserTypeId = (int)dr["SecurityUserTypeId"],
+                            ClinicId = (int)dr["ClinicId"],
+                            ClinicConsultingId = (int)dr["ClinicConsultingId"]
                         });
                     }
                 }

@@ -44,10 +44,9 @@ namespace Dentis.Controllers
 
                 return View("Index");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                return RedirectToAction("Error", "Home" , new {errorMessage = e.Message.ToString() });
             }
         }
     }

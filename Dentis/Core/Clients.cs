@@ -39,6 +39,7 @@ namespace Dentis.Core
             }
             catch (Exception)
             {
+                throw;
                 return 0;
             }
         }

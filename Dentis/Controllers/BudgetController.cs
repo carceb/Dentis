@@ -17,25 +17,32 @@ namespace Dentis.Controllers
 		}
         public IActionResult Index(int clientId, int budgetId)
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                BudgetViweModel budgetViweModel = new BudgetViweModel();
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    BudgetViweModel budgetViweModel = new BudgetViweModel();
 
-                ViewBag.ClientId = clientId;
-                ViewBag.ClientName = _client.GetClientById(clientId).Select(x => x.ClientName).FirstOrDefault();
-                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                budgetViweModel.ClientId = clientId;
-                budgetViweModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
+                    ViewBag.ClientId = clientId;
+                    ViewBag.ClientName = _client.GetClientById(clientId).Select(x => x.ClientName).FirstOrDefault();
+                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                    budgetViweModel.ClientId = clientId;
+                    budgetViweModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
 
-                ViewBag.Quadrant = new SelectList(this._budget.GetQuadrants(), "QuadrantId", "QuadrantName");
-                ViewBag.QuadrantTooth = new SelectList(this._budget.GetQuadrantTooth(1), "QuadrantToothId", "ToothNumber");
-                ViewBag.ProcedureName = new SelectList(this._budget.GetProcedures(), "ProcedureId", "ProcedureName");
+                    ViewBag.Quadrant = new SelectList(this._budget.GetQuadrants(), "QuadrantId", "QuadrantName");
+                    ViewBag.QuadrantTooth = new SelectList(this._budget.GetQuadrantTooth(1), "QuadrantToothId", "ToothNumber");
+                    ViewBag.ProcedureName = new SelectList(this._budget.GetProcedures(), "ProcedureId", "ProcedureName");
 
-                return View(budgetViweModel);
+                    return View(budgetViweModel);
+                }
+                else
+                {
+                    return RedirectToAction("Error", "Home", new { errorMessage = "No existe el usuario" });
+                }
             }
-            else 
+            catch (Exception e)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
             }
         }
 
@@ -59,48 +66,71 @@ namespace Dentis.Controllers
 
         public JsonResult AddBudget(string customers)
         {
-            int budgetId = 0;
-
-            if (customers != "[]")
+            try
             {
-                var list = JsonExtensions.FromDelimitedJson<BudgetViweModel>(new StringReader(customers.Replace("[", string.Empty).Replace("]", string.Empty))).ToList();
+                int budgetId = 0;
 
-                budgetId = _budget.AddOrEdit(list);
+                if (customers != "[]")
+                {
+                    var list = JsonExtensions.FromDelimitedJson<BudgetViweModel>(new StringReader(customers.Replace("[", string.Empty).Replace("]", string.Empty))).ToList();
+
+                    budgetId = _budget.AddOrEdit(list);
+                }
+
+                return Json(budgetId);
             }
-
-            return Json(budgetId);
+            catch (Exception e)
+            {
+                return Json(e.Message);
+            }
         }
 
         public IActionResult PrintBudget(int budgetId, int clinicConsultingId)
         {
-            if (budgetId > 0)
+            try
             {
-                ViewBag.ShareLink = $"{Request.Scheme}://{Request.Host.Value}{Request.Path.Value}/PrintBudget?budgetId={budgetId}&clinicConsultingId={clinicConsultingId}";
-                var model = _budget.GetBudgetDetailByBudgetIdAndClinicConsultingId(budgetId, clinicConsultingId);
-                return View(model);
-            }
+                if (budgetId > 0)
+                {
+                    var hostName = (Request.Host.Value.Contains("localhost:80") ? "localhost/Dentis" : Request.Host.Value);
+                    ViewBag.ShareLink = $"{Request.Scheme}://{hostName}{Request.Path.Value}/PrintBudget?budgetId={budgetId}&clinicConsultingId={clinicConsultingId}";
+                    var model = _budget.GetBudgetDetailByBudgetIdAndClinicConsultingId(budgetId, clinicConsultingId);
+                    return View(model);
+                }
 
-            return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = "Presupuesto no existe" });
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+            }
         }
 
         public IActionResult ListBudgets(int clientId)
         {
-            int clinicConsultingId = 0;
-            if (clientId > 0)
+            try
             {
-                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                int clinicConsultingId = 0;
+                if (clientId > 0)
                 {
-                    clinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
-
-                    var model = _budget.GetBudgetDetailByClientIdAndClinicConsultingId(clientId, clinicConsultingId);
-                    if (model.Any())
+                    if (HttpContext.Session.GetString("SecurityUserId") != null)
                     {
-                        return View(model);
-                    }                    
-                }
-            }
+                        clinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
 
-            return RedirectToAction("Error", "Home");
+                        var model = _budget.GetBudgetDetailByClientIdAndClinicConsultingId(clientId, clinicConsultingId);
+                        if (model.Any())
+                        {
+                            return View(model);
+                        }
+                    }
+                }
+
+                return RedirectToAction("Error", "Home", new { errorMessage = "Cliente no existe" });
+            }
+            catch (Exception e)
+            {
+
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+            }
         }        
 
         public JsonResult GetQuadrantTooth(int quadrantToothId)

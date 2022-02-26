@@ -17,15 +17,24 @@ namespace Dentis.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("ClinicConsultingName") != null)
+            try
             {
-                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                ViewBag.ShareLink =  $"{Request.Scheme}://{Request.Host.Value}{Request.Path.Value}/CheckQueueFromExternal?clinicConsultingId={(int)HttpContext.Session.GetInt32("ClinicConsultingId")}";
-                ViewBag.QueueStatus = new SelectList(this._queue.GetQueueEstatus(), "QueueEstatusId", "QueueEstatusName");
-                return View(_queue.GetActiveQueue((int)HttpContext.Session.GetInt32("ClinicConsultingId")));
+                if (HttpContext.Session.GetString("ClinicConsultingName") != null)
+                {
+                    var hostName = (Request.Host.Value.Contains("localhost:80") ? "localhost/Dentis" : Request.Host.Value);
+                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                    ViewBag.ShareLink = $"{Request.Scheme}://{hostName}{Request.Path.Value}/CheckQueueFromExternal?clinicConsultingId={(int)HttpContext.Session.GetInt32("ClinicConsultingId")}";
+                    ViewBag.QueueStatus = new SelectList(this._queue.GetQueueEstatus(), "QueueEstatusId", "QueueEstatusName");
+                    return View(_queue.GetActiveQueue((int)HttpContext.Session.GetInt32("ClinicConsultingId")));
+                }
+
+                return RedirectToAction("Error", "Home", new { errorMessage = "Presupuesto no existe" });
             }
-          
-            return RedirectToAction("Error", "Home");
+            catch (Exception e)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+            }
+
         }
         public IActionResult CheckQueueFromExternal(int clinicConsultingId)
         {

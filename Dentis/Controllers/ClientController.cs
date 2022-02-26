@@ -40,89 +40,118 @@ namespace Dentis.Controllers
         [HttpPost]
         public IActionResult SelectClient(ClientViewModel clientViewModel)
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                var model = _client.GetClientByIdentificationNumber(clientViewModel.IdentificationNumber).FirstOrDefault();
-
-                if (model != null)
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
                 {
-                    return RedirectToAction("Index", "Budget", new { clientId = model.ClientId });
-                }
-                else
-                {
-                   return RedirectToAction("Add", new { idNumber = clientViewModel.IdentificationNumber});
+                    var model = _client.GetClientByIdentificationNumber(clientViewModel.IdentificationNumber).FirstOrDefault();
+
+                    if (model != null)
+                    {
+                        return RedirectToAction("Index", "Budget", new { clientId = model.ClientId });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Add", new { idNumber = clientViewModel.IdentificationNumber });
+                    }
                 }
 
+                return RedirectToAction("Error", "Home", new { errorMessage = "Usuario invalido" });
             }
-            else
+            catch (Exception e)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
             }
         }
 
         public IActionResult Edit(int clientId)
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                ClientViewModel list = new ClientViewModel();
-                var model = _client.GetClientById(clientId).FirstOrDefault();
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                    ClientViewModel list = new ClientViewModel();
+                    var model = _client.GetClientById(clientId).FirstOrDefault();
 
-                ViewBag.Gender = new SelectList(GetGenders());
+                    ViewBag.Gender = new SelectList(GetGenders());
 
-                return View(model);
+                    return View(model);
+                }
+
+                return RedirectToAction("Error", "Home", new { errorMessage = "Usuario invalido" });
             }
-            else
+            catch (Exception e)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() }); ;
             }
         }
 
         [HttpPost]
         public IActionResult Edit(ClientViewModel model)
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                _client.AddOrEdit(model);
-                return RedirectToAction("SelectClient");
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                    _client.AddOrEdit(model);
+                    return RedirectToAction("SelectClient");
+                }
+
+                return RedirectToAction("Error", "Home", new { errorMessage = "Usuario invalido" });
             }
-            else
+            catch (Exception e)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() }); ; ;
             }
         }
 
         public IActionResult Add(double? idNumber)
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                ClientViewModel clientViewModel = new ClientViewModel();
-                clientViewModel.IdentificationNumber = idNumber;
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                    ClientViewModel clientViewModel = new ClientViewModel();
+                    clientViewModel.IdentificationNumber = idNumber;
 
-                ViewBag.Gender = new SelectList(GetGenders());
-                return View(clientViewModel);
+                    ViewBag.Gender = new SelectList(GetGenders());
+                    return View(clientViewModel);
+                }
+
+                return RedirectToAction("Error", "Home", new { errorMessage = "Usuario invalido" });
+
             }
-            else
+            catch (Exception e)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
             }
+
         }
 
         [HttpPost]
         public IActionResult Add(ClientViewModel clientViewModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                int clientId = _client.AddOrEdit(clientViewModel);
-                if (clientId > 0)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Index", "Budget", new { clientId = clientId });
+                    int clientId = _client.AddOrEdit(clientViewModel);
+                    if (clientId > 0)
+                    {
+                        return RedirectToAction("Index", "Budget", new { clientId = clientId });
+                    }
                 }
+
+                return RedirectToAction("Error", "Home", new { errorMessage = "Existen datos incompletosXX" });
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
             }
 
-            return RedirectToAction("Error", "Home");
         }
 
         private List<string> GetGenders()

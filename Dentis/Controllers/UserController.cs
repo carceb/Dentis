@@ -76,6 +76,8 @@ namespace Dentis.Controllers
                 model.SecurityUserTypeId = item.SecurityUserTypeId;
                 model.UserPassword = item.UserPassword;
                 model.UserLogin = item.UserLogin;
+                model.ClinicConsultingId = item.ClinicConsultingId;
+                model.ClinicId = item.ClinicId;
             }
 
             if (HttpContext.Session.GetInt32("SecurityUserId") != null)
@@ -85,8 +87,8 @@ namespace Dentis.Controllers
 
             if (!IsSuperUser())
             {
-                ViewBag.Clinic = new SelectList(this._clinic.GetClinicByUserId(userId), "ClinicId", "ClinicName");
-                ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingUserByUserId(userId), "ClinicConsultingId", "ClinicConsultingName");
+                ViewBag.Clinic = new SelectList(this._clinic.GetClinicByUserId(securityUserId), "ClinicId", "ClinicName");
+                ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingsByClinicId(model.ClinicId), "ClinicConsultingId", "ClinicConsultingName");
             }
             else
             {

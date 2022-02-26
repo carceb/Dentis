@@ -325,7 +325,7 @@
             $.ajax({
               type: "POST",
               dataType: 'json',  
-              url: "/Budget/AddBudget",
+              url:  '@Url.Action("AddBudget", "Budget")',
               data: { customers: JSON.stringify(customers)}, 
               success: function (r) {
                 if(r > 0){

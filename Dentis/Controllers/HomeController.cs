@@ -16,17 +16,22 @@ namespace Dentis.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                ViewBag.UserName = UserName();
-                ViewBag.IsSuperUser = Utils.Utils.IsSuperUser((int)HttpContext.Session.GetInt32("SecurityUserTypeId"));
-                ViewBag.ClinicName = (string)HttpContext.Session.GetString("ClinicName");
-                ViewBag.ClinicConsultingName = (string)HttpContext.Session.GetString("ClinicConsultingName");
-                return View(_patient.GetPatients());
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    ViewBag.UserName = UserName();
+                    ViewBag.IsSuperUser = Utils.Utils.IsSuperUser((int)HttpContext.Session.GetInt32("SecurityUserTypeId"));
+                    ViewBag.ClinicName = (string)HttpContext.Session.GetString("ClinicName");
+                    ViewBag.ClinicConsultingName = (string)HttpContext.Session.GetString("ClinicConsultingName");
+                    return View(_patient.GetPatients());
+                }
+
+                 return RedirectToAction("Error", "Home", new { errorMessage = "No existe el usuario" });
             }
-            else
+            catch (Exception e)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
             }
         }
 
@@ -36,9 +41,10 @@ namespace Dentis.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(string errorMessage)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.ErrorMessage = errorMessage;
+            return View();
         }
         private string UserName()
         {

@@ -162,7 +162,7 @@
 						resizable: false,
 						buttons: {
 							"Ok": function () {
-								window.location.href ="Queue/UpdateStatus?patiendId=" + patiendId;
+								window.location.href = '@Url.Action("UpdateStatus", "Queue", new {patiendId = patiendId})';// "Queue/UpdateStatus?patiendId=" + patiendId;
 							},
 							"Cancel": function (e) {
 								$(this).dialog("close");

@@ -17,55 +17,66 @@ namespace Dentis.Controllers
         }
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                int userId = 0;
-
-                ClinicConsultingViewModel model = new ClinicConsultingViewModel();
-
-                if (HttpContext.Session.GetInt32("SecurityUserId") != null)
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
                 {
-                    userId = (int)HttpContext.Session.GetInt32("SecurityUserId");
-                }
+                    int userId = 0;
 
-                if (!IsSuperUser())
-                {
-                    ViewBag.Clinic = new SelectList(this._clinic.GetClinicByUserId(userId), "ClinicId", "ClinicName");
-                    ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingUserByUserId(userId), "ClinicConsultingId", "ClinicConsultingName");
-                }
-                else
-                {
-                    var firstClinc = this._clinic.GetClinics().FirstOrDefault();
-                    if (firstClinc != null)
+                    ClinicConsultingViewModel model = new ClinicConsultingViewModel();
+
+                    if (HttpContext.Session.GetInt32("SecurityUserId") != null)
                     {
-                        ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
-                        ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingsByClinicId(firstClinc.ClinicId), "ClinicConsultingId", "ClinicConsultingName");
+                        userId = (int)HttpContext.Session.GetInt32("SecurityUserId");
                     }
+
+                    if (!IsSuperUser())
+                    {
+                        ViewBag.Clinic = new SelectList(this._clinic.GetClinicByUserId(userId), "ClinicId", "ClinicName");
+                        ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingUserByUserId(userId), "ClinicConsultingId", "ClinicConsultingName");
+                    }
+                    else
+                    {
+                        var firstClinc = this._clinic.GetClinics().FirstOrDefault();
+                        if (firstClinc != null)
+                        {
+                            ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
+                            ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingsByClinicId(firstClinc.ClinicId), "ClinicConsultingId", "ClinicConsultingName");
+                        }
+                    }
+
+                    return View();
                 }
 
-                return View();
+                return RedirectToAction("Index", "Login");
             }
-            else 
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
 
         [HttpPost]
         public IActionResult Index(ClinicConsultingViewModel model)
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                HttpContext.Session.SetInt32("ClinicConsultingId", model.ClinicConsultingId);
-                HttpContext.Session.SetInt32("ClinicId", model.ClinicId);
-                HttpContext.Session.SetString("ClinicName", _clinic.GetClinicById(model.ClinicId).FirstOrDefault().ClinicName);
-                HttpContext.Session.SetString("ClinicConsultingName", _clinicConsulting.GetClinicConsultingByClinicConsultingId(model.ClinicConsultingId).FirstOrDefault().ClinicConsultingName);
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    HttpContext.Session.SetInt32("ClinicConsultingId", model.ClinicConsultingId);
+                    HttpContext.Session.SetInt32("ClinicId", model.ClinicId);
+                    HttpContext.Session.SetString("ClinicName", _clinic.GetClinicById(model.ClinicId).FirstOrDefault().ClinicName);
+                    HttpContext.Session.SetString("ClinicConsultingName", _clinicConsulting.GetClinicConsultingByClinicConsultingId(model.ClinicConsultingId).FirstOrDefault().ClinicConsultingName);
 
-                return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
+                }
+
+                return RedirectToAction("Index", "Login");
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home");
+
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
         private bool IsSuperUser()

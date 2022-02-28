@@ -28,43 +28,57 @@ namespace Dentis.Controllers
                     return View(_queue.GetActiveQueue((int)HttpContext.Session.GetInt32("ClinicConsultingId")));
                 }
 
-                return RedirectToAction("Error", "Home", new { errorMessage = "Presupuesto no existe" });
+                return RedirectToAction("Index", "Login");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
 
         }
         public IActionResult CheckQueueFromExternal(int clinicConsultingId)
         {
-            var clinicConsulting = _clinicConsulting.GetClinicConsultingByClinicConsultingId(clinicConsultingId);
-
-            ViewBag.ClinicConsultingId = clinicConsultingId;
-
-            if (clinicConsulting.Any())
+            try
             {
-                ViewBag.ClinicConsultingName = clinicConsulting.FirstOrDefault().ClinicConsultingName;
+                var clinicConsulting = _clinicConsulting.GetClinicConsultingByClinicConsultingId(clinicConsultingId);
+
+                ViewBag.ClinicConsultingId = clinicConsultingId;
+
+                if (clinicConsulting.Any())
+                {
+                    ViewBag.ClinicConsultingName = clinicConsulting.FirstOrDefault().ClinicConsultingName;
+                }
+                else
+                {
+                    ViewBag.ClinicConsultingName = "N/D";
+                }
+
+                return View(_queue.GetActiveQueue(clinicConsultingId));
             }
-            else 
+            catch (Exception ex)
             {
-                ViewBag.ClinicConsultingName = "N/D";
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
-            
-            return View(_queue.GetActiveQueue(clinicConsultingId));
         }
 
         public IActionResult UpdateStatus(int patiendId)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (_queue.UpdateQueueStatus(2, patiendId))
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction(nameof(Index));
+                    if (_queue.UpdateQueueStatus(2, patiendId))
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
-            }
 
-            return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
+            }
         }
     }
 }

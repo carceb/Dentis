@@ -29,24 +29,29 @@ namespace Dentis.Controllers
 
                 return View(clinicViewModel);
             }
-            else
-            {
-                return RedirectToAction("Error", "Home");
-            }
+
+            return RedirectToAction("Index", "Login");
         }
 
         [HttpPost]
         public IActionResult SelectClinic(ClinicViewModel model)
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                if (model != null)
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
                 {
-                    return RedirectToAction("Edit", "Clinic", new { clinicId = model.ClinicId });
+                    if (model != null)
+                    {
+                        return RedirectToAction("Edit", "Clinic", new { clinicId = model.ClinicId });
+                    }
                 }
-            }
 
-            return RedirectToAction("Error", "Home");
+                return RedirectToAction("Index", "Login");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
+            }
         }
 
         public IActionResult SelectUser()
@@ -59,10 +64,8 @@ namespace Dentis.Controllers
 
                 return View(clinicViewModel);
             }
-            else
-            {
-                return RedirectToAction("Error", "Home");
-            }
+
+            return RedirectToAction("Index", "Login");
         }
 
         [HttpPost]
@@ -76,7 +79,7 @@ namespace Dentis.Controllers
                 }
             }
 
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Index", "Login");
         }
     }
 }

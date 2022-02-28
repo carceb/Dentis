@@ -19,32 +19,39 @@ namespace Dentis.Controllers
         }
         public IActionResult Add()
         {
-            int userId = 0;
-            SecurityUserModel model = new SecurityUserModel();
-            ViewBag.UserType = new SelectList(_security.GetUserTypes(), "SecurityUserTypeId", "SecurityUserTypeName");
+            try
+            {
+                int userId = 0;
+                SecurityUserModel model = new SecurityUserModel();
+                ViewBag.UserType = new SelectList(_security.GetUserTypes(), "SecurityUserTypeId", "SecurityUserTypeName");
 
 
-            if (HttpContext.Session.GetInt32("SecurityUserId") != null)
-            {
-                userId = (int)HttpContext.Session.GetInt32("SecurityUserId");
-            }
-
-            if (!IsSuperUser())
-            {
-                ViewBag.Clinic = new SelectList(this._clinic.GetClinicByUserId(userId), "ClinicId", "ClinicName");
-                ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingUserByUserId(userId), "ClinicConsultingId", "ClinicConsultingName");
-            }
-            else
-            {
-                var firstClinc = this._clinic.GetClinics().FirstOrDefault();
-                if (firstClinc != null)
+                if (HttpContext.Session.GetInt32("SecurityUserId") != null)
                 {
-                    ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
-                    ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingsByClinicId(firstClinc.ClinicId), "ClinicConsultingId", "ClinicConsultingName");
+                    userId = (int)HttpContext.Session.GetInt32("SecurityUserId");
                 }
-            }
 
-            return View(model);
+                if (!IsSuperUser())
+                {
+                    ViewBag.Clinic = new SelectList(this._clinic.GetClinicByUserId(userId), "ClinicId", "ClinicName");
+                    ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingUserByUserId(userId), "ClinicConsultingId", "ClinicConsultingName");
+                }
+                else
+                {
+                    var firstClinc = this._clinic.GetClinics().FirstOrDefault();
+                    if (firstClinc != null)
+                    {
+                        ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
+                        ViewBag.ClinicConsulting = new SelectList(this._clinicConsulting.GetClinicConsultingsByClinicId(firstClinc.ClinicId), "ClinicConsultingId", "ClinicConsultingName");
+                    }
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
+            }
         }
 
         [HttpPost]

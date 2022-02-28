@@ -27,11 +27,11 @@ namespace Dentis.Controllers
                     return View(_patient.GetPatients());
                 }
 
-                 return RedirectToAction("Error", "Home", new { errorMessage = "No existe el usuario" });
+                return RedirectToAction("Index", "Login");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
 

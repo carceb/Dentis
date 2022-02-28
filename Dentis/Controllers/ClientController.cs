@@ -16,24 +16,29 @@ namespace Dentis.Controllers
 
         public IActionResult SelectClient(string budgetType = "PrintBudget")
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                if (budgetType == "PrintBudget")
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
                 {
-                    ClientViewModel clientViewModel = new ClientViewModel();
-                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                    return View(clientViewModel);
+                    if (budgetType == "PrintBudget")
+                    {
+                        ClientViewModel clientViewModel = new ClientViewModel();
+                        ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                        return View(clientViewModel);
+                    }
+                    else
+                    {
+                        ClientViewModel clientViewModel = new ClientViewModel();
+                        ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                        return View(clientViewModel);
+                    }
                 }
-                else
-                {
-                    ClientViewModel clientViewModel = new ClientViewModel();
-                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                    return View(clientViewModel);
-                }
+
+                return RedirectToAction("Index", "Login");
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
 
@@ -56,11 +61,11 @@ namespace Dentis.Controllers
                     }
                 }
 
-                return RedirectToAction("Error", "Home", new { errorMessage = "Usuario invalido" });
+                return RedirectToAction("Index", "Login");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
 
@@ -79,11 +84,11 @@ namespace Dentis.Controllers
                     return View(model);
                 }
 
-                return RedirectToAction("Error", "Home", new { errorMessage = "Usuario invalido" });
+                return RedirectToAction("Index", "Login");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() }); ;
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() }); ;
             }
         }
 
@@ -99,11 +104,11 @@ namespace Dentis.Controllers
                     return RedirectToAction("SelectClient");
                 }
 
-                return RedirectToAction("Error", "Home", new { errorMessage = "Usuario invalido" });
+                return RedirectToAction("Index", "Login");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() }); ; ;
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() }); ; ;
             }
         }
 
@@ -121,12 +126,12 @@ namespace Dentis.Controllers
                     return View(clientViewModel);
                 }
 
-                return RedirectToAction("Error", "Home", new { errorMessage = "Usuario invalido" });
+                return RedirectToAction("Index", "Login");
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
 
         }
@@ -145,11 +150,11 @@ namespace Dentis.Controllers
                     }
                 }
 
-                return RedirectToAction("Error", "Home", new { errorMessage = "Existen datos incompletosXX" });
+                return RedirectToAction("Index", "Login");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
 
         }

@@ -14,65 +14,115 @@ namespace Dentis.Controllers
         }
         public IActionResult Add()
         {
-            ClinicViewModel model = new ClinicViewModel();
-
-            int? securityUserTypeId = HttpContext.Session.GetInt32("SecurityUserTypeId");
-            int? clinicId = HttpContext.Session.GetInt32("ClinicId");
-            if (securityUserTypeId == 1)
+            try
             {
-               return View(model);
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    ClinicViewModel model = new ClinicViewModel();
+
+                    int? securityUserTypeId = HttpContext.Session.GetInt32("SecurityUserTypeId");
+                    int? clinicId = HttpContext.Session.GetInt32("ClinicId");
+                    if (securityUserTypeId == 1)
+                    {
+                        return View(model);
+                    }
+
+                    return RedirectToAction("Add", "ClinicConsulting", new { clinicIdSaved = clinicId });
+                }
+
+                return RedirectToAction("Index", "Login");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
 
-            return RedirectToAction("Add", "ClinicConsulting", new { clinicIdSaved = clinicId });
         }
 
         [HttpPost]
         public IActionResult Add(ClinicViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                int clinicId = _clinic.AddOrEdit(model);
-                if (clinicId != 0)
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
                 {
-                    return RedirectToAction("Add", "ClinicConsulting", new { clinicIdSaved = clinicId });
-                }
-            }
 
-            return RedirectToAction("Error", "Home");
+                    if (ModelState.IsValid)
+                    {
+                        int clinicId = _clinic.AddOrEdit(model);
+                        if (clinicId != 0)
+                        {
+                            return RedirectToAction("Add", "ClinicConsulting", new { clinicIdSaved = clinicId });
+                        }
+                    }
+                }
+
+                return RedirectToAction("Index", "Login");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
+            }
+;
         }
         public IActionResult Edit(int clinicId)
         {
-            ClinicViewModel model = new ClinicViewModel();
-            var list = _clinic.GetClinicById(clinicId);
-
-            foreach (var item in list)
+            try
             {
-                model.ClinicId = item.ClinicId;
-                model.ClinicName = item.ClinicName;
-                model.ClinicRif = item.ClinicRif;
-                model.ClinicAddress = item.ClinicAddress;
-                model.ClinicEmail = item.ClinicEmail;
-                model.ClinicPhoneNumber = item.ClinicPhoneNumber;
-                model.WebPage = item.WebPage;
-                model.ClinicStatus = item.ClinicStatus;
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    ClinicViewModel model = new ClinicViewModel();
+                    var list = _clinic.GetClinicById(clinicId);
+
+                    foreach (var item in list)
+                    {
+                        model.ClinicId = item.ClinicId;
+                        model.ClinicName = item.ClinicName;
+                        model.ClinicRif = item.ClinicRif;
+                        model.ClinicAddress = item.ClinicAddress;
+                        model.ClinicEmail = item.ClinicEmail;
+                        model.ClinicPhoneNumber = item.ClinicPhoneNumber;
+                        model.WebPage = item.WebPage;
+                        model.ClinicStatus = item.ClinicStatus;
+                    }
+
+                    ViewBag.Status = new SelectList(GetClinicStatus());
+
+                    return View(model);
+                }
+
+                return RedirectToAction("Index", "Login");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
 
-            ViewBag.Status = new SelectList(GetClinicStatus());
-
-            return View(model);
         }
 
         [HttpPost]
         public IActionResult Edit(ClinicViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                int clinicId = _clinic.AddOrEdit(model);
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    if (ModelState.IsValid)
+                    {
+                        int clinicId = _clinic.AddOrEdit(model);
 
-                return RedirectToAction("Index", "Setting");
+                        return RedirectToAction("Index", "Setting");
+                    }
+
+                    return RedirectToAction("Error", "Home");
+                }
+
+                return RedirectToAction("Index", "Login");
             }
-
-            return RedirectToAction("Error", "Home");
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() }); ;
+            }
         }
 
         private List<string> GetClinicStatus()

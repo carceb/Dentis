@@ -18,46 +18,54 @@ namespace Dentis.Controllers
 
         public IActionResult Add()
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                PatientViewModel patientViewModel = new PatientViewModel();
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
+                {
+                    PatientViewModel patientViewModel = new PatientViewModel();
 
-                ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
-                ViewBag.PatientGender = new SelectList(GetGenders());
-                ViewBag.PatientAges = new SelectList(GetAges());
-                ViewBag.AppointmentReason = new SelectList(this._appointmentReason.GetAppointmentReasons(), "AppointmentReasonId", "AppointmentReasonName");
+                    ViewBag.ConsultingName = HttpContext.Session.GetString("ClinicConsultingName").ToString();
+                    ViewBag.PatientGender = new SelectList(GetGenders());
+                    ViewBag.PatientAges = new SelectList(GetAges());
+                    ViewBag.AppointmentReason = new SelectList(this._appointmentReason.GetAppointmentReasons(), "AppointmentReasonId", "AppointmentReasonName");
 
-                return View(patientViewModel);
+                    return View(patientViewModel);
+                }
+
+                return RedirectToAction("Index", "Login");
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
 
         [HttpPost]
         public IActionResult Add(PatientViewModel patientViewModel)
         {
-            if (HttpContext.Session.GetString("SecurityUserId") != null)
+            try
             {
-                if (ModelState.IsValid)
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
                 {
-                    if (HttpContext.Session.GetInt32("ClinicConsultingId") != null)
+                    if (ModelState.IsValid)
                     {
-                        patientViewModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
-                    }
+                        if (HttpContext.Session.GetInt32("ClinicConsultingId") != null)
+                        {
+                            patientViewModel.ClinicConsultingId = (int)HttpContext.Session.GetInt32("ClinicConsultingId");
+                        }
 
-                    if (_patient.AddOrEdit(patientViewModel))
-                    {
-                        return RedirectToAction(nameof(Add));
+                        if (_patient.AddOrEdit(patientViewModel))
+                        {
+                            return RedirectToAction(nameof(Add));
+                        }
                     }
                 }
 
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Index", "Login");
             }
-            else
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
 

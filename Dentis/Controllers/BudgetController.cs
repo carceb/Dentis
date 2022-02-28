@@ -35,14 +35,12 @@ namespace Dentis.Controllers
 
                     return View(budgetViweModel);
                 }
-                else
-                {
-                    return RedirectToAction("Error", "Home", new { errorMessage = "No existe el usuario" });
-                }
+
+                return RedirectToAction("Index", "Login");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
 
@@ -79,9 +77,9 @@ namespace Dentis.Controllers
 
                 return Json(budgetId);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return Json(e.Message);
+                return Json(ex.Message);
             }
         }
 
@@ -99,9 +97,9 @@ namespace Dentis.Controllers
 
                 return RedirectToAction("Error", "Home", new { errorMessage = "Presupuesto no existe" });
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }
 
@@ -126,10 +124,10 @@ namespace Dentis.Controllers
 
                 return RedirectToAction("Error", "Home", new { errorMessage = "Cliente no existe" });
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
 
-                return RedirectToAction("Error", "Home", new { errorMessage = e.Message.ToString() });
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
             }
         }        
 
@@ -163,5 +161,4 @@ namespace Dentis.Controllers
             }
         }
     }
-
 }

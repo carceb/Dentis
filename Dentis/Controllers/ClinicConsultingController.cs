@@ -23,33 +23,50 @@ namespace Dentis.Controllers
         [HttpPost()]
         public IActionResult Add(ClinicConsultingViewModel model)
         {
-            if (ModelState.IsValid)
-            {                    
-                int clinicConsultingId = _clinicConsulting.AddOrEdit(model);
-                ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
-
-                if (clinicConsultingId != 0)
+            try
+            {
+                if (HttpContext.Session.GetString("SecurityUserId") != null)
                 {
-                    if (!Utils.Utils.IsSuperUser((int)HttpContext.Session.GetInt32("SecurityUserTypeId")))
+                    if (ModelState.IsValid)
                     {
-                        return RedirectToAction("Add", new { clinicIdSaved = model.ClinicId });
+                        int clinicConsultingId = _clinicConsulting.AddOrEdit(model);
+                        ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
+
+                        if (clinicConsultingId != 0)
+                        {
+                            if (!Utils.Utils.IsSuperUser((int)HttpContext.Session.GetInt32("SecurityUserTypeId")))
+                            {
+                                return RedirectToAction("Add", new { clinicIdSaved = model.ClinicId });
+                            }
+
+                            return RedirectToAction("AddNewConsulting");
+                        }
                     }
-
-                    return RedirectToAction("AddNewConsulting");
                 }
-            }
 
-            return RedirectToAction("Error", "Home");
+                return RedirectToAction("Index", "Login");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() });
+            }            
         }
 
         public IActionResult AddNewConsulting()
         {
-            ClinicConsultingViewModel model = new ClinicConsultingViewModel();
+            try
+            {
+                ClinicConsultingViewModel model = new ClinicConsultingViewModel();
 
-            ViewBag.ClinicName = "Super Admin";
-            ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
+                ViewBag.ClinicName = "Super Admin";
+                ViewBag.Clinic = new SelectList(this._clinic.GetClinics(), "ClinicId", "ClinicName");
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { errorMessage = ex.Message.ToString() }); ;
+            }
         }
     }
 }
